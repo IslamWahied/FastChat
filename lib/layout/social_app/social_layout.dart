@@ -19,7 +19,6 @@ class SocialLayout extends StatelessWidget {
           //   NewPostScreen(),
           // );
         }
-
       },
       builder: (context, state)
       {
