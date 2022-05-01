@@ -8,6 +8,8 @@ import 'package:fast_chat/layout/social_app/cubit/states.dart';
 import 'package:fast_chat/shared/styles/icon_broken.dart';
 
 class SocialLayout extends StatelessWidget {
+  const SocialLayout({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context)
   {
@@ -29,20 +31,20 @@ class SocialLayout extends StatelessWidget {
             title: Text(
               cubit.titles[cubit.currentIndex],
             ),
-            actions: [
-              IconButton(
-                icon: Icon(
-                  IconBroken.Notification,
-                ),
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: Icon(
-                  IconBroken.Search,
-                ),
-                onPressed: () {},
-              ),
-            ],
+            // actions: [
+            //   IconButton(
+            //     icon: const Icon(
+            //       IconBroken.Notification,
+            //     ),
+            //     onPressed: () {},
+            //   ),
+            //   IconButton(
+            //     icon: const Icon(
+            //       IconBroken.Search,
+            //     ),
+            //     onPressed: () {},
+            //   ),
+            // ],
           ),
           body: cubit.screens[cubit.currentIndex],
           bottomNavigationBar: BottomNavigationBar(
@@ -51,31 +53,15 @@ class SocialLayout extends StatelessWidget {
             {
               cubit.changeBottomNav(index);
             },
-            items: [
-              BottomNavigationBarItem(
-                icon: Icon(
-                  IconBroken.Home,
-                ),
-                label: 'Home',
-              ),
+            items: const [
+
               BottomNavigationBarItem(
                 icon: Icon(
                   IconBroken.Chat,
                 ),
                 label: 'Chats',
               ),
-              BottomNavigationBarItem(
-                icon: Icon(
-                  IconBroken.Paper_Upload,
-                ),
-                label: 'Post',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(
-                  IconBroken.Location,
-                ),
-                label: 'Users',
-              ),
+
               BottomNavigationBarItem(
                 icon: Icon(
                   IconBroken.Setting,

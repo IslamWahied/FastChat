@@ -97,8 +97,8 @@ class MyApp extends StatelessWidget {
             theme: lightTheme,
             darkTheme: darkTheme,
             themeMode: ThemeMode.light,
-            home: SocialRegisterScreen(),
-            // home: startWidget,
+            // home: SocialRegisterScreen(),
+            home: startWidget,
           );
         },
       ),
