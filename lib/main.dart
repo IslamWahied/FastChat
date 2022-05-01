@@ -1,8 +1,8 @@
 // @dart=2.9
-import 'package:bloc/bloc.dart';
-import 'package:fast_chat/modules/social_app/social_register/social_register_screen.dart';
+
+
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,7 +11,7 @@ import 'package:fast_chat/layout/social_app/cubit/cubit.dart';
 import 'package:fast_chat/layout/social_app/social_layout.dart';
 
 import 'package:fast_chat/modules/social_app/social_login/social_login_screen.dart';
-import 'package:fast_chat/shared/bloc_observer.dart';
+
 import 'package:fast_chat/shared/components/constants.dart';
 import 'package:fast_chat/shared/cubit/cubit.dart';
 import 'package:fast_chat/shared/cubit/states.dart';
@@ -48,7 +48,7 @@ void main() async {
   //   }
 
   if (uId != null) {
-    widget = SocialLayout();
+    widget = const SocialLayout();
   } else {
     widget = SocialLoginScreen();
   }
@@ -70,10 +70,10 @@ class MyApp extends StatelessWidget {
   final bool isDark;
   final Widget startWidget;
 
-  MyApp({
+  const MyApp({Key key,
     this.isDark,
     this.startWidget,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +86,7 @@ class MyApp extends StatelessWidget {
             ),
         ),
         BlocProvider(
-          create: (BuildContext context) => SocialCubit()..getUserData(),
+          create: (BuildContext context) => SocialCubit()..getUserData()..getUsers(),
         ),
       ],
       child: BlocConsumer<AppCubit, AppStates>(

@@ -1,8 +1,15 @@
 
+// ignore_for_file: deprecated_member_use
+
 // @dart=2.9
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fast_chat/modules/social_app/groups/groups.dart';
+import 'package:fast_chat/modules/social_app/social_login/social_login_screen.dart';
+import 'package:fast_chat/shared/components/components.dart';
+import 'package:fast_chat/shared/network/local/cache_helper.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -33,7 +40,7 @@ class SocialCubit extends Cubit<SocialStates> {
       userModel = SocialUserModel.fromJson(value.data());
       emit(SocialGetUserSuccessState());
     }).catchError((error) {
-      print(error.toString());
+      debugPrint(error.toString());
       emit(SocialGetUserErrorState(error.toString()));
     });
   }
@@ -42,25 +49,26 @@ class SocialCubit extends Cubit<SocialStates> {
 
   List<Widget> screens = [
 
-    ChatsScreen(),
-
-
-    SettingsScreen(),
+    const ChatsScreen(),
+    const GroupsScreen(),
+    const SettingsScreen(),
   ];
 
   List<String> titles = [
 
     'Chats',
-
-
+    'Groups',
     'Settings',
   ];
 
   void changeBottomNav(int index) {
-    if (index == 1) getUsers();
-    if (index == 2)
-      emit(SocialNewPostState());
-    else {
+    if (index == 0||index==1) {
+      getUsers();
+      currentIndex = index;
+      emit(SocialChangeBottomNavState());
+
+
+    } else {
       currentIndex = index;
       emit(SocialChangeBottomNavState());
     }
@@ -79,7 +87,7 @@ class SocialCubit extends Cubit<SocialStates> {
 
       emit(SocialProfileImagePickedSuccessState());
     } else {
-      print('No image selected.');
+      debugPrint('No image selected.');
       emit(SocialProfileImagePickedErrorState());
     }
   }
@@ -104,7 +112,7 @@ class SocialCubit extends Cubit<SocialStates> {
         .then((value) {
       value.ref.getDownloadURL().then((value) {
         //emit(SocialUploadProfileImageSuccessState());
-        print(value);
+        debugPrint(value);
         updateUser(
           name: name,
           phone: phone,
@@ -162,7 +170,7 @@ class SocialCubit extends Cubit<SocialStates> {
       postImage = File(pickedFile.path);
       emit(SocialPostImagePickedSuccessState());
     } else {
-      print('No image selected.');
+      debugPrint('No image selected.');
       emit(SocialPostImagePickedErrorState());
     }
   }
@@ -175,18 +183,20 @@ class SocialCubit extends Cubit<SocialStates> {
   List<SocialUserModel> users = [];
 
   void getUsers() {
-    if (users.length == 0)
+    if (users.isEmpty) {
       FirebaseFirestore.instance.collection('users').get().then((value) {
-        value.docs.forEach((element) {
-          if (element.data()['uId'] != userModel.uId)
+        for (var element in value.docs) {
+          if (element.data()['uId'] != userModel.uId) {
             users.add(SocialUserModel.fromJson(element.data()));
-        });
+          }
+        }
 
         emit(SocialGetAllUsersSuccessState());
       }).catchError((error) {
-        print(error.toString());
+        debugPrint(error.toString());
         emit(SocialGetAllUsersErrorState(error.toString()));
       });
+    }
   }
 
   void sendMessage({
@@ -248,11 +258,29 @@ class SocialCubit extends Cubit<SocialStates> {
         .listen((event) {
       messages = [];
 
-      event.docs.forEach((element) {
+      for (var element in event.docs) {
         messages.add(MessageModel.fromJson(element.data()));
-      });
+      }
 
       emit(SocialGetMessagesSuccessState());
     });
   }
+
+
+
+
+  void signOut(context)async{
+    await FirebaseAuth.instance.signOut();
+    CacheHelper.removeData(key: 'uId');
+
+    navigateAndFinish(context, SocialLoginScreen());
+    emit(SocialSignOutState());
+
+
+  }
+
+
+
+
+
 }

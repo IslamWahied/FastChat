@@ -1,4 +1,6 @@
 // @dart=2.9
+// ignore_for_file: must_be_immutable
+
 import 'package:conditional_builder/conditional_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,6 +16,8 @@ class SocialRegisterScreen extends StatelessWidget {
   var passwordController = TextEditingController();
   var phoneController = TextEditingController();
 
+  SocialRegisterScreen({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -23,7 +27,7 @@ class SocialRegisterScreen extends StatelessWidget {
           if (state is SocialCreateUserSuccessState) {
             navigateAndFinish(
               context,
-              SocialLayout(),
+              const SocialLayout(),
             );
           }
         },
@@ -51,7 +55,7 @@ class SocialRegisterScreen extends StatelessWidget {
                                 color: Colors.grey,
                               ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 30.0,
                         ),
                         defaultFormField(
@@ -65,7 +69,7 @@ class SocialRegisterScreen extends StatelessWidget {
                           label: 'User Name',
                           prefix: Icons.person,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 15.0,
                         ),
                         defaultFormField(
@@ -79,7 +83,7 @@ class SocialRegisterScreen extends StatelessWidget {
                           label: 'Email Address',
                           prefix: Icons.email_outlined,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 15.0,
                         ),
                         defaultFormField(
@@ -101,7 +105,7 @@ class SocialRegisterScreen extends StatelessWidget {
                           label: 'Password',
                           prefix: Icons.lock_outline,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 15.0,
                         ),
                         defaultFormField(
@@ -115,7 +119,7 @@ class SocialRegisterScreen extends StatelessWidget {
                           label: 'Phone',
                           prefix: Icons.phone,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 30.0,
                         ),
                         ConditionalBuilder(
@@ -135,7 +139,7 @@ class SocialRegisterScreen extends StatelessWidget {
                             isUpperCase: true,
                           ),
                           fallback: (context) =>
-                              Center(child: CircularProgressIndicator()),
+                              const Center(child: CircularProgressIndicator()),
                         ),
                       ],
                     ),

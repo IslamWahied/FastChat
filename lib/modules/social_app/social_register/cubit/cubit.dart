@@ -1,7 +1,6 @@
 // @dart=2.9
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -21,7 +20,7 @@ class SocialRegisterCubit extends Cubit<SocialRegisterStates> {
     @required String password,
     @required String phone,
   }) {
-    print('hello');
+    debugPrint('hello');
 
     emit(SocialRegisterLoadingState());
 
@@ -69,7 +68,7 @@ class SocialRegisterCubit extends Cubit<SocialRegisterStates> {
           emit(SocialCreateUserSuccessState());
     })
         .catchError((error) {
-          print(error.toString());
+      debugPrint(error.toString());
       emit(SocialCreateUserErrorState(error.toString()));
     });
   }

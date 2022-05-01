@@ -1,4 +1,6 @@
 // @dart=2.9
+// ignore_for_file: must_be_immutable
+
 import 'package:conditional_builder/conditional_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,31 +16,33 @@ class SocialLoginScreen extends StatelessWidget {
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
 
+  SocialLoginScreen({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (BuildContext context) => SocialLoginCubit(),
       child: BlocConsumer<SocialLoginCubit, SocialLoginStates>(
         listener: (context, state) {
-          // if (state is SocialLoginErrorState) {
-          //   showToast(
-          //     text: state.error,
-          //     state: ToastStates.ERROR,
-          //   );
-          // }
-          // if(state is SocialLoginSuccessState)
-          // {
-          //   CacheHelper.saveData(
-          //     key: 'uId',
-          //     value: state.uId,
-          //   ).then((value)
-          //   {
-          //     navigateAndFinish(
-          //       context,
-          //       SocialLayout(),
-          //     );
-          //   });
-          // }
+          if (state is SocialLoginErrorState) {
+            showToast(
+              text: state.error,
+              state: ToastStates.ERROR,
+            );
+          }
+          if(state is SocialLoginSuccessState)
+          {
+            CacheHelper.saveData(
+              key: 'uId',
+              value: state.uId,
+            ).then((value)
+            {
+              navigateAndFinish(
+                context,
+                const SocialLayout(),
+              );
+            });
+          }
         },
         builder: (context, state) {
           return Scaffold(
@@ -78,7 +82,7 @@ class SocialLoginScreen extends StatelessWidget {
                           label: 'Email Address',
                           prefix: Icons.email_outlined,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 15.0,
                         ),
                         defaultFormField(
@@ -106,7 +110,7 @@ class SocialLoginScreen extends StatelessWidget {
                           label: 'Password',
                           prefix: Icons.lock_outline,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 30.0,
                         ),
                         ConditionalBuilder(
@@ -124,15 +128,15 @@ class SocialLoginScreen extends StatelessWidget {
                             isUpperCase: true,
                           ),
                           fallback: (context) =>
-                              Center(child: CircularProgressIndicator()),
+                              const Center(child: CircularProgressIndicator()),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 15.0,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
+                            const Text(
                               'Don\'t have an account?',
                             ),
                             defaultTextButton(

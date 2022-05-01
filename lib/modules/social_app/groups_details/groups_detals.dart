@@ -12,10 +12,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 
-class ChatDetailsScreen extends StatelessWidget {
+class GroupDetailsScreen extends StatelessWidget {
   SocialUserModel userModel;
 
-  ChatDetailsScreen({Key key,
+  GroupDetailsScreen({Key key,
     this.userModel,
   }) : super(key: key);
 
@@ -141,58 +141,58 @@ class ChatDetailsScreen extends StatelessWidget {
   }
 
   Widget buildMessage(MessageModel model) => Align(
-        alignment: AlignmentDirectional.centerStart,
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.grey[300],
-            borderRadius: const BorderRadiusDirectional.only(
-              bottomEnd: Radius.circular(
-                10.0,
-              ),
-              topStart: Radius.circular(
-                10.0,
-              ),
-              topEnd: Radius.circular(
-                10.0,
-              ),
-            ),
+    alignment: AlignmentDirectional.centerStart,
+    child: Container(
+      decoration: BoxDecoration(
+        color: Colors.grey[300],
+        borderRadius: const BorderRadiusDirectional.only(
+          bottomEnd: Radius.circular(
+            10.0,
           ),
-          padding: const EdgeInsets.symmetric(
-            vertical: 5.0,
-            horizontal: 10.0,
+          topStart: Radius.circular(
+            10.0,
           ),
-          child: Text(
-            model.text,
+          topEnd: Radius.circular(
+            10.0,
           ),
         ),
-      );
+      ),
+      padding: const EdgeInsets.symmetric(
+        vertical: 5.0,
+        horizontal: 10.0,
+      ),
+      child: Text(
+        model.text,
+      ),
+    ),
+  );
 
   Widget buildMyMessage(MessageModel model) => Align(
-        alignment: AlignmentDirectional.centerEnd,
-        child: Container(
-          decoration: BoxDecoration(
-            color: defaultColor.withOpacity(
-              .2,
-            ),
-            borderRadius: const BorderRadiusDirectional.only(
-              bottomStart: Radius.circular(
-                10.0,
-              ),
-              topStart: Radius.circular(
-                10.0,
-              ),
-              topEnd: Radius.circular(
-                10.0,
-              ),
-            ),
+    alignment: AlignmentDirectional.centerEnd,
+    child: Container(
+      decoration: BoxDecoration(
+        color: defaultColor.withOpacity(
+          .2,
+        ),
+        borderRadius: const BorderRadiusDirectional.only(
+          bottomStart: Radius.circular(
+            10.0,
           ),
-          padding: const EdgeInsets.symmetric(
-            vertical: 5.0,
-            horizontal: 10.0,
+          topStart: Radius.circular(
+            10.0,
           ),
-          child: Text(
-            model.text,
+          topEnd: Radius.circular(
+            10.0,
           ),
         ),
-      );
+      ),
+      padding: const EdgeInsets.symmetric(
+        vertical: 5.0,
+        horizontal: 10.0,
+      ),
+      child: Text(
+        model.text,
+      ),
+    ),
+  );
 }
