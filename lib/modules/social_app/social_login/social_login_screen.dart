@@ -20,25 +20,25 @@ class SocialLoginScreen extends StatelessWidget {
       create: (BuildContext context) => SocialLoginCubit(),
       child: BlocConsumer<SocialLoginCubit, SocialLoginStates>(
         listener: (context, state) {
-          if (state is SocialLoginErrorState) {
-            showToast(
-              text: state.error,
-              state: ToastStates.ERROR,
-            );
-          }
-          if(state is SocialLoginSuccessState)
-          {
-            CacheHelper.saveData(
-              key: 'uId',
-              value: state.uId,
-            ).then((value)
-            {
-              navigateAndFinish(
-                context,
-                SocialLayout(),
-              );
-            });
-          }
+          // if (state is SocialLoginErrorState) {
+          //   showToast(
+          //     text: state.error,
+          //     state: ToastStates.ERROR,
+          //   );
+          // }
+          // if(state is SocialLoginSuccessState)
+          // {
+          //   CacheHelper.saveData(
+          //     key: 'uId',
+          //     value: state.uId,
+          //   ).then((value)
+          //   {
+          //     navigateAndFinish(
+          //       context,
+          //       SocialLayout(),
+          //     );
+          //   });
+          // }
         },
         builder: (context, state) {
           return Scaffold(
