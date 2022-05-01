@@ -3,14 +3,15 @@ import 'package:conditional_builder/conditional_builder.dart';
 import 'package:fast_chat/layout/social_app/cubit/cubit.dart';
 import 'package:fast_chat/layout/social_app/cubit/states.dart';
 import 'package:fast_chat/models/social_app/social_user_model.dart';
-import 'package:fast_chat/modules/social_app/chat_details/chat_details_screen.dart';
+import 'package:fast_chat/modules/social_app/groups_details/groups_detals.dart';
+
 import 'package:fast_chat/shared/components/components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 
-class ChatsScreen extends StatelessWidget {
-  const ChatsScreen({Key key}) : super(key: key);
+class GroupsScreen extends StatelessWidget {
+  const GroupsScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,35 +34,35 @@ class ChatsScreen extends StatelessWidget {
   }
 
   Widget buildChatItem(SocialUserModel model, context) => InkWell(
-        onTap: () {
-          navigateTo(
-            context,
-            ChatDetailsScreen(
-              userModel: model,
-            ),
-          );
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Row(
-            children: [
-              CircleAvatar(
-                radius: 25.0,
-                backgroundImage: NetworkImage(
-                  model.image,
-                ),
-              ),
-              const SizedBox(
-                width: 15.0,
-              ),
-              Text(
-                model.name,
-                style: const TextStyle(
-                  height: 1.4,
-                ),
-              ),
-            ],
-          ),
+    onTap: () {
+      navigateTo(
+        context,
+        GroupDetailsScreen(
+          userModel: model,
         ),
       );
+    },
+    child: Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Row(
+        children: [
+          CircleAvatar(
+            radius: 25.0,
+            backgroundImage: NetworkImage(
+              model.image,
+            ),
+          ),
+          const SizedBox(
+            width: 15.0,
+          ),
+          Text(
+            model.name,
+            style: const TextStyle(
+              height: 1.4,
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 }

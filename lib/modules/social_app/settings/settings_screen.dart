@@ -8,176 +8,122 @@ import 'package:fast_chat/modules/social_app/edit_profile/edit_profile_screen.da
 import 'package:fast_chat/shared/components/components.dart';
 import 'package:fast_chat/shared/styles/icon_broken.dart';
 
-class SettingsScreen extends StatelessWidget
-{
+class SettingsScreen extends StatelessWidget {
+  const SettingsScreen({Key key}) : super(key: key);
+
   @override
-  Widget build(BuildContext context)
-  {
+  Widget build(BuildContext context) {
     return BlocConsumer<SocialCubit, SocialStates>(
       listener: (context, state) {},
-      builder: (context, state)
-      {
+      builder: (context, state) {
         var userModel = SocialCubit.get(context).userModel;
 
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              Container(
-                height: 190.0,
-                child: Stack(
-                  alignment: AlignmentDirectional.bottomCenter,
-                  children: [
-                    Align(
-                      child: Container(
-                        height: 140.0,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(
-                              4.0,
-                            ),
-                            topRight: Radius.circular(
-                              4.0,
-                            ),
-                          ),
-                          image: DecorationImage(
-                            image: NetworkImage(
-                              '${userModel.cover}',
-                            ),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                      alignment: AlignmentDirectional.topCenter,
-                    ),
-                    CircleAvatar(
-                      radius: 64.0,
-                      backgroundColor:
-                          Theme.of(context).scaffoldBackgroundColor,
-                      child: CircleAvatar(
-                        radius: 60.0,
-                        backgroundImage: NetworkImage(
-                          '${userModel.image}',
-                        ),
+        return SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 140.0,
+                  child: CircleAvatar(
+                    radius: 64.0,
+                    backgroundColor:
+                        Theme.of(context).scaffoldBackgroundColor,
+                    child: CircleAvatar(
+                      radius: 60.0,
+                      backgroundImage: NetworkImage(
+                        userModel.image,
                       ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: 5.0,
-              ),
-              Text(
-                '${userModel.name}',
-                style: Theme.of(context).textTheme.bodyText1,
-              ),
-              Text(
-                '${userModel.bio}',
-                style: Theme.of(context).textTheme.caption,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 20.0,
+                const SizedBox(
+                  height: 15.0,
                 ),
-                child: Row(
+                Text(
+                  userModel.name,
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+                const SizedBox(
+                  height: 5.0,
+                ),
+
+                Text(
+                  userModel.bio,
+                  style: Theme.of(context).textTheme.caption,
+                ),
+                const SizedBox(
+                  height: 15.0,
+                ),
+
+                Row(
                   children: [
                     Expanded(
-                      child: InkWell(
-                        child: Column(
-                          children: [
-                            Text(
-                              '100',
-                              style: Theme.of(context).textTheme.subtitle2,
-                            ),
-                            Text(
-                              'Posts',
-                              style: Theme.of(context).textTheme.caption,
-                            ),
-                          ],
+                      child: OutlinedButton(
+                        onPressed: () {
+                          navigateTo(
+                            context,
+                            EditProfileScreen(),
+                          );
+                        },
+                        child: Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              Text(
+                                'Edit Profile',
+                              ),
+                              SizedBox(
+                                width: 10.0,
+                              ),
+                              Icon(
+                                IconBroken.Edit,
+                                size: 16.0,
+                              ),
+                            ],
+                          ),
                         ),
-                        onTap: () {},
                       ),
                     ),
-                    Expanded(
-                      child: InkWell(
-                        child: Column(
-                          children: [
-                            Text(
-                              '265',
-                              style: Theme.of(context).textTheme.subtitle2,
-                            ),
-                            Text(
-                              'Photos',
-                              style: Theme.of(context).textTheme.caption,
-                            ),
-                          ],
-                        ),
-                        onTap: () {},
-                      ),
-                    ),
-                    Expanded(
-                      child: InkWell(
-                        child: Column(
-                          children: [
-                            Text(
-                              '10k',
-                              style: Theme.of(context).textTheme.subtitle2,
-                            ),
-                            Text(
-                              'Followers',
-                              style: Theme.of(context).textTheme.caption,
-                            ),
-                          ],
-                        ),
-                        onTap: () {},
-                      ),
-                    ),
-                    Expanded(
-                      child: InkWell(
-                        child: Column(
-                          children: [
-                            Text(
-                              '64',
-                              style: Theme.of(context).textTheme.subtitle2,
-                            ),
-                            Text(
-                              'Followings',
-                              style: Theme.of(context).textTheme.caption,
-                            ),
-                          ],
-                        ),
-                        onTap: () {},
-                      ),
-                    ),
+                    IconButton(onPressed: (){
+                      SocialCubit.get(context).signOut(context);
+
+                    }, icon: const Icon(
+                      Icons.logout,
+
+                      color: Colors.red,
+                    ),)
                   ],
                 ),
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton(
-                      onPressed: () {},
-                      child: Text(
-                        'Add Photos',
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 10.0,
-                  ),
-                  OutlinedButton(
-                    onPressed: () {
-                      navigateTo(context, EditProfileScreen(),);
-                    },
-                    child: Icon(
-                      IconBroken.Edit,
-                      size: 16.0,
-                    ),
-                  ),
-                ],
-              ),
-            ],
+                const SizedBox(
+                  height: 15.0,
+                ),
+
+                ListTile(leading: const Icon(Icons.person),title: Text(userModel.name),),
+                const SizedBox(
+                  height: 15.0,
+                ),
+
+                ListTile(leading: const Icon(Icons.note_add_outlined),title: Text(userModel.bio),),
+                const SizedBox(
+                  height: 15.0,
+                ),
+
+                ListTile(leading: const Icon(Icons.email),title: Text(userModel.email),),
+                const SizedBox(
+                  height: 15.0,
+                ),
+
+                ListTile(leading: const Icon(Icons.phone),title: Text(userModel.phone),),
+                const SizedBox(
+                  height: 15.0,
+                ),
+
+
+
+
+              ],
+            ),
           ),
         );
       },

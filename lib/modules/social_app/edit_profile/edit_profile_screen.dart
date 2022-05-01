@@ -1,7 +1,8 @@
 // @dart=2.9
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:fast_chat/layout/social_app/cubit/cubit.dart';
 import 'package:fast_chat/layout/social_app/cubit/states.dart';
 import 'package:fast_chat/shared/components/components.dart';
@@ -11,6 +12,8 @@ class EditProfileScreen extends StatelessWidget {
   var nameController = TextEditingController();
   var phoneController = TextEditingController();
   var bioController = TextEditingController();
+
+  EditProfileScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,11 +38,13 @@ class EditProfileScreen extends StatelessWidget {
                   SocialCubit.get(context).updateUser(
                       name: nameController.text,
                       phone: phoneController.text,
-                      bio: bioController.text);
+                      bio: bioController.text,
+
+                  );
                 },
                 text: 'Update',
               ),
-              SizedBox(
+              const SizedBox(
                 width: 15.0,
               ),
             ],
@@ -50,58 +55,17 @@ class EditProfileScreen extends StatelessWidget {
               child: Column(
                 children: [
                   if (state is SocialUserUpdateLoadingState)
-                    LinearProgressIndicator(),
+                    const LinearProgressIndicator(),
                   if (state is SocialUserUpdateLoadingState)
-                    SizedBox(
+                    const SizedBox(
                       height: 10.0,
                     ),
-                  Container(
+                  SizedBox(
                     height: 190.0,
                     child: Stack(
                       alignment: AlignmentDirectional.bottomCenter,
                       children: [
-                        // Align(
-                        //   child: Stack(
-                        //     alignment: AlignmentDirectional.topEnd,
-                        //     children: [
-                        //       Container(
-                        //         height: 140.0,
-                        //         width: double.infinity,
-                        //         decoration: BoxDecoration(
-                        //           borderRadius: BorderRadius.only(
-                        //             topLeft: Radius.circular(
-                        //               4.0,
-                        //             ),
-                        //             topRight: Radius.circular(
-                        //               4.0,
-                        //             ),
-                        //           ),
-                        //           image: DecorationImage(
-                        //             image: coverImage == null
-                        //                 ? NetworkImage(
-                        //                     '${userModel.cover}',
-                        //                   )
-                        //                 : FileImage(coverImage),
-                        //             fit: BoxFit.cover,
-                        //           ),
-                        //         ),
-                        //       ),
-                        //       IconButton(
-                        //         icon: CircleAvatar(
-                        //           radius: 20.0,
-                        //           child: Icon(
-                        //             IconBroken.Camera,
-                        //             size: 16.0,
-                        //           ),
-                        //         ),
-                        //         onPressed: () {
-                        //           SocialCubit.get(context).getCoverImage();
-                        //         },
-                        //       ),
-                        //     ],
-                        //   ),
-                        //   alignment: AlignmentDirectional.topCenter,
-                        // ),
+
                         Stack(
                           alignment: AlignmentDirectional.bottomEnd,
                           children: [
@@ -113,13 +77,13 @@ class EditProfileScreen extends StatelessWidget {
                                 radius: 60.0,
                                 backgroundImage: profileImage == null
                                     ? NetworkImage(
-                                        '${userModel.image}',
+                                        userModel.image,
                                       )
                                     : FileImage(profileImage),
                               ),
                             ),
                             IconButton(
-                              icon: CircleAvatar(
+                              icon: const CircleAvatar(
                                 radius: 20.0,
                                 child: Icon(
                                   IconBroken.Camera,
@@ -135,7 +99,7 @@ class EditProfileScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20.0,
                   ),
                   // if (SocialCubit.get(context).profileImage != null ||
@@ -212,7 +176,7 @@ class EditProfileScreen extends StatelessWidget {
                     label: 'Name',
                     prefix: IconBroken.User,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10.0,
                   ),
                   defaultFormField(
@@ -228,7 +192,7 @@ class EditProfileScreen extends StatelessWidget {
                     label: 'Bio',
                     prefix: IconBroken.Info_Circle,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10.0,
                   ),
                   defaultFormField(

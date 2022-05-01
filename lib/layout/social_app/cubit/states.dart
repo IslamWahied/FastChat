@@ -90,3 +90,11 @@ class SocialSendMessageSuccessState extends SocialStates {}
 class SocialSendMessageErrorState extends SocialStates {}
 
 class SocialGetMessagesSuccessState extends SocialStates {}
+
+
+
+
+// Sign Out
+
+class SocialSignOutState extends SocialStates {}
+

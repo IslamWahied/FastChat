@@ -1,5 +1,7 @@
 // @dart=2.9
 
+// ignore_for_file: constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -22,7 +24,7 @@ Widget defaultButton({
         onPressed: function,
         child: Text(
           isUpperCase ? text.toUpperCase() : text,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
           ),
         ),
@@ -82,7 +84,7 @@ Widget defaultFormField({
                 ),
               )
             : null,
-        border: OutlineInputBorder(),
+        border: const OutlineInputBorder(),
       ),
     );
 
@@ -96,7 +98,7 @@ Widget defaultAppBar({
     {
       Navigator.pop(context);
     },
-    icon: Icon(
+    icon: const Icon(
       IconBroken.Arrow___Left_2,
     ),
   ),

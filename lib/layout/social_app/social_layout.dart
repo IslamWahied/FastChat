@@ -61,6 +61,12 @@ class SocialLayout extends StatelessWidget {
                 ),
                 label: 'Chats',
               ),
+              BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.group
+                ),
+                label: 'Groups',
+              ),
 
               BottomNavigationBarItem(
                 icon: Icon(
