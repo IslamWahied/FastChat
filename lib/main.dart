@@ -1,10 +1,11 @@
 // @dart=2.9
 import 'package:bloc/bloc.dart';
+import 'package:fast_chat/modules/social_app/social_register/social_register_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 
 import 'package:fast_chat/layout/social_app/cubit/cubit.dart';
 import 'package:fast_chat/layout/social_app/social_layout.dart';
@@ -22,7 +23,7 @@ void main() async {
   // بيتأكد ان كل حاجه هنا في الميثود خلصت و بعدين يتفح الابلكيشن
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp();
+  await Firebase.initializeApp( );
 
   // Bloc.observer = MyBlocObserver();
 
@@ -46,11 +47,9 @@ void main() async {
   //     widget = OnBoardingScreen();
   //   }
 
-  if(uId != null)
-  {
+  if (uId != null) {
     widget = SocialLayout();
-  } else
-  {
+  } else {
     widget = SocialLoginScreen();
   }
 
@@ -65,8 +64,7 @@ void main() async {
 
 // class MyApp
 
-class MyApp extends StatelessWidget
-{
+class MyApp extends StatelessWidget {
   // constructor
   // build
   final bool isDark;
@@ -78,18 +76,15 @@ class MyApp extends StatelessWidget
   });
 
   @override
-  Widget build(BuildContext context)
-  {
+  Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-
         BlocProvider(
           create: (BuildContext context) => AppCubit()
             ..changeAppMode(
               fromShared: isDark,
             ),
         ),
-
         BlocProvider(
           create: (BuildContext context) => SocialCubit()..getUserData(),
         ),
@@ -102,8 +97,8 @@ class MyApp extends StatelessWidget
             theme: lightTheme,
             darkTheme: darkTheme,
             themeMode: ThemeMode.light,
-            home: SocialLayout(),
-           // home: startWidget,
+            home: SocialRegisterScreen(),
+            // home: startWidget,
           );
         },
       ),
