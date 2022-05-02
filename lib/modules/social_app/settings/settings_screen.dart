@@ -86,14 +86,7 @@ class SettingsScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    IconButton(onPressed: (){
-                      SocialCubit.get(context).signOut(context);
 
-                    }, icon: const Icon(
-                      Icons.logout,
-
-                      color: Colors.red,
-                    ),)
                   ],
                 ),
                 const SizedBox(
@@ -121,7 +114,12 @@ class SettingsScreen extends StatelessWidget {
                 ),
 
 
-
+                ListTile(leading: GestureDetector(onTap: (){
+                  SocialCubit.get(context).signOut(context);
+                },child: const Icon(Icons.logout)),title: const Text('Logout'),),
+                const SizedBox(
+                  height: 15.0,
+                ),
 
               ],
             ),

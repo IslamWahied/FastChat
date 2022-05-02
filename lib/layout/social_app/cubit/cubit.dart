@@ -66,7 +66,7 @@ class SocialCubit extends Cubit<SocialStates> {
 
   void changeBottomNav(int index) {
     if (index == 0||index==1) {
-      getUsers();
+
       currentIndex = index;
       emit(SocialChangeBottomNavState());
 
@@ -200,18 +200,23 @@ class SocialCubit extends Cubit<SocialStates> {
   void getUsers() {
     listUsers=[];
     if (listUsers.isEmpty) {
-      FirebaseFirestore.instance.collection('users').get().then((value) {
-        for (var element in value.docs) {
 
-            listUsers.add(SocialUserModel.fromJson(element.data()));
 
-        }
-
+      FirebaseFirestore.instance
+          .collection('users')
+          .snapshots()
+          .listen((event) {
+        listUsers = event.docs.map((x) => SocialUserModel.fromJson(x.data())).toList();
         emit(SocialGetAllUsersSuccessState());
-      }).catchError((error) {
-        debugPrint(error.toString());
-        emit(SocialGetAllUsersErrorState(error.toString()));
+      }).onError((handleError){
+        debugPrint(handleError.toString());
+        emit(SocialGetAllUsersErrorState(handleError.toString()));
       });
+
+
+
+
+
     }
   }
 

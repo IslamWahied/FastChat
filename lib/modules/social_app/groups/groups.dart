@@ -37,7 +37,7 @@ class GroupsScreen extends StatelessWidget {
                             builder: (context,setState){
                               return AlertDialog(
                                 content: SizedBox(
-                                  height: MediaQuery.of(context).size.height * 0.2,
+                                  height: MediaQuery.of(context).size.height * 0.4,
                                   width: MediaQuery.of(context).size.width * 0.4,
                                   child: SingleChildScrollView(
                                     child: Column(
@@ -47,7 +47,7 @@ class GroupsScreen extends StatelessWidget {
                                           mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text(
+                                            const Text(
                                               'Sort by:',
                                               style: TextStyle(
                                                   color: Colors.green,
@@ -64,9 +64,9 @@ class GroupsScreen extends StatelessWidget {
 
                                                     });
                                                   },
-                                                  child: CircleAvatar(
+                                                  child: const CircleAvatar(
                                                     radius: 15,
-                                                    child: const Icon(
+                                                    child: Icon(
                                                       Icons.arrow_downward,
                                                       color: Colors.white,
                                                       size: 17,
@@ -88,9 +88,9 @@ class GroupsScreen extends StatelessWidget {
 
                                                     });
                                                   },
-                                                  child: CircleAvatar(
+                                                  child: const CircleAvatar(
                                                     radius: 15,
-                                                    child: const Icon(
+                                                    child: Icon(
                                                       Icons.arrow_upward,
                                                       color: Colors.white,
                                                       size: 17,
@@ -118,14 +118,14 @@ class GroupsScreen extends StatelessWidget {
                                           child: Row(
                                             mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
-                                            children: [
+                                            children: const [
                                               Text(
                                                 'Sort by date',
                                                 style: TextStyle(
                                                     color: Colors.green,
                                                     fontWeight: FontWeight.w500),
                                               ),
-                                              const Icon(Icons.sort)
+                                              Icon(Icons.sort)
                                             ],
                                           ),
                                         ),
@@ -141,14 +141,14 @@ class GroupsScreen extends StatelessWidget {
                                           child: Row(
                                             mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
-                                            children: [
+                                            children: const [
                                               Text(
                                                 'Sort by case number',
                                                 style: TextStyle(
                                                     color: Colors.green,
                                                     fontWeight: FontWeight.w500),
                                               ),
-                                              const Icon(Icons.sort)
+                                              Icon(Icons.sort)
                                             ],
                                           ),
                                         ),
