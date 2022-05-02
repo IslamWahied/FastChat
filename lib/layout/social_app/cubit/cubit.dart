@@ -180,15 +180,16 @@ class SocialCubit extends Cubit<SocialStates> {
 
 
 
-  List<SocialUserModel> users = [];
+  List<SocialUserModel> listUsers = [];
 
   void getUsers() {
-    if (users.isEmpty) {
+
+    if (listUsers.isEmpty) {
       FirebaseFirestore.instance.collection('users').get().then((value) {
         for (var element in value.docs) {
-          if (element.data()['uId'] != userModel.uId) {
-            users.add(SocialUserModel.fromJson(element.data()));
-          }
+
+            listUsers.add(SocialUserModel.fromJson(element.data()));
+
         }
 
         emit(SocialGetAllUsersSuccessState());
@@ -208,38 +209,23 @@ class SocialCubit extends Cubit<SocialStates> {
       text: text,
       senderId: userModel.uId,
       receiverId: receiverId,
+      groupId: '0',
       dateTime: dateTime,
     );
 
     // set my chats
 
     FirebaseFirestore.instance
-        .collection('users')
-        .doc(userModel.uId)
-        .collection('chats')
-        .doc(receiverId)
-        .collection('messages')
+        .collection('chat')
         .add(model.toMap())
         .then((value) {
+
       emit(SocialSendMessageSuccessState());
     }).catchError((error) {
       emit(SocialSendMessageErrorState());
     });
 
-    // set receiver chats
 
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(receiverId)
-        .collection('chats')
-        .doc(userModel.uId)
-        .collection('messages')
-        .add(model.toMap())
-        .then((value) {
-      emit(SocialSendMessageSuccessState());
-    }).catchError((error) {
-      emit(SocialSendMessageErrorState());
-    });
   }
 
   List<MessageModel> messages = [];
@@ -248,19 +234,28 @@ class SocialCubit extends Cubit<SocialStates> {
     @required String receiverId,
   }) {
     FirebaseFirestore.instance
-        .collection('users')
-        .doc(userModel.uId)
-        .collection('chats')
-        .doc(receiverId)
-        .collection('messages')
-        .orderBy('dateTime')
+        .collection('chat')
         .snapshots()
         .listen((event) {
       messages = [];
 
       for (var element in event.docs) {
+
         messages.add(MessageModel.fromJson(element.data()));
       }
+
+      print('userModel.uId');
+      print(userModel.uId);
+      print('userModel.uId');
+
+      messages = messages.where((element) => element.receiverId == userModel.uId || element.senderId == userModel.uId).toList();
+
+      messages.sort((b, a) {
+        var aDate = b.dateTime;
+        var bDate = a.dateTime;
+        return bDate.compareTo(
+            aDate);
+      });
 
       emit(SocialGetMessagesSuccessState());
     });

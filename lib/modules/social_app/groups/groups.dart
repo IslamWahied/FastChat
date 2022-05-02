@@ -19,13 +19,13 @@ class GroupsScreen extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         return ConditionalBuilder(
-          condition: SocialCubit.get(context).users.isNotEmpty,
+          condition: SocialCubit.get(context).listUsers.isNotEmpty,
           builder: (context) => ListView.separated(
             physics: const BouncingScrollPhysics(),
             itemBuilder: (context, index) =>
-                buildChatItem(SocialCubit.get(context).users[index], context),
+                buildChatItem(SocialCubit.get(context).listUsers[index], context),
             separatorBuilder: (context, index) => myDivider(),
-            itemCount: SocialCubit.get(context).users.length,
+            itemCount: SocialCubit.get(context).listUsers.length,
           ),
           fallback: (context) => const Center(child: CircularProgressIndicator()),
         );

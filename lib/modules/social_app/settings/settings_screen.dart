@@ -23,6 +23,7 @@ class SettingsScreen extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
+                if(userModel != null &&  userModel.image != null)
                 SizedBox(
                   height: 140.0,
                   child: CircleAvatar(

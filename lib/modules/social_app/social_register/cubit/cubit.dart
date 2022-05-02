@@ -20,23 +20,21 @@ class SocialRegisterCubit extends Cubit<SocialRegisterStates> {
     @required String password,
     @required String phone,
   }) {
-    debugPrint('hello');
+
 
     emit(SocialRegisterLoadingState());
 
-    FirebaseAuth.instance
-        .createUserWithEmailAndPassword(
+    FirebaseAuth.instance.createUserWithEmailAndPassword(
       email: email,
       password: password,
-    )
-        .then((value) {
+    ).then((value) {
       userCreate(
         uId: value.user.uid,
         phone: phone,
         email: email,
         name: name,
-
       );
+
     }).catchError((error) {
       emit(SocialRegisterErrorState(error.toString()));
     });

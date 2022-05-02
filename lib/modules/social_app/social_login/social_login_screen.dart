@@ -121,6 +121,7 @@ class SocialLoginScreen extends StatelessWidget {
                                 SocialLoginCubit.get(context).userLogin(
                                   email: emailController.text,
                                   password: passwordController.text,
+                                  context: context
                                 );
                               }
                             },

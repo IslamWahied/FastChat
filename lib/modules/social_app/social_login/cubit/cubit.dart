@@ -1,4 +1,6 @@
 // @dart=2.9
+import 'package:fast_chat/layout/social_app/cubit/cubit.dart';
+import 'package:fast_chat/shared/network/local/cache_helper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,17 +14,20 @@ class SocialLoginCubit extends Cubit<SocialLoginStates> {
   void userLogin({
     @required String email,
     @required String password,
+    @required BuildContext context,
   }) {
-    emit(SocialLoginLoadingState());
 
+    emit(SocialLoginLoadingState());
     FirebaseAuth.instance
         .signInWithEmailAndPassword(
           email: email,
           password: password,
         )
-        .then((value) {
-      debugPrint(value.user.email);
-          debugPrint(value.user.uid);
+        .then((value) async {
+
+            await CacheHelper.saveData(value:value.user.uid ,key: 'uId');
+            SocialCubit.get(context).getUsers();
+
           emit(SocialLoginSuccessState(value.user.uid));
     })
         .catchError((error)
