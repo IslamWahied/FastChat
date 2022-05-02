@@ -294,7 +294,24 @@ class SocialCubit extends Cubit<SocialStates> {
 
   }
 
+  var txtGroupNameController=TextEditingController();
 
+  List<SocialUserModel> selectedUsers = [];
+
+  void selectUsers(val) {
+    selectedUsers = val;
+    // for (var element in selectedGroups) {
+    //   groups.add(element.name);
+    // }
+    emit(HomeSelectedUsersState());
+  }
+
+void addGroup(){
+
+
+
+
+}
 
 
 
