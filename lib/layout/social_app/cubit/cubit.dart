@@ -213,11 +213,6 @@ class SocialCubit extends Cubit<SocialStates> {
         debugPrint(handleError.toString());
         emit(SocialGetAllUsersErrorState(handleError.toString()));
       });
-
-
-
-
-
     }
   }
 
