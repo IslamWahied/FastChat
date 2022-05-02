@@ -133,6 +133,7 @@ class SocialRegisterScreen extends StatelessWidget {
                                   password: passwordController.text,
                                   phone: phoneController.text,
                                 );
+
                               }
                             },
                             text: 'register',

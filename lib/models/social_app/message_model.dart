@@ -2,12 +2,14 @@
 class MessageModel {
   String senderId;
   String receiverId;
+  String groupId;
   String dateTime;
   String text;
 
   MessageModel({
     this.senderId,
     this.receiverId,
+    this.groupId,
     this.dateTime,
     this.text,
   });
@@ -16,6 +18,7 @@ class MessageModel {
   {
     senderId = json['senderId'];
     receiverId = json['receiverId'];
+    groupId = json['groupId'];
     dateTime = json['dateTime'];
     text = json['text'];
   }
@@ -25,6 +28,7 @@ class MessageModel {
     return {
       'senderId':senderId,
       'receiverId':receiverId,
+      'groupId':groupId,
       'dateTime':dateTime,
       'text':text,
     };

@@ -53,13 +53,15 @@ class ChatDetailsScreen extends StatelessWidget {
                 ),
               ),
               body: ConditionalBuilder(
-                condition: SocialCubit.get(context).messages.isNotEmpty,
+                condition: true,
                 builder: (context) => Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Expanded(
                         child: ListView.separated(
+reverse: true,
                           physics: const BouncingScrollPhysics(),
                           itemBuilder: (context, index)
                           {
@@ -77,6 +79,7 @@ class ChatDetailsScreen extends StatelessWidget {
                           itemCount: SocialCubit.get(context).messages.length,
                         ),
                       ),
+                      const SizedBox(height: 10,),
                       Container(
                         decoration: BoxDecoration(
                           border: Border.all(
@@ -114,6 +117,7 @@ class ChatDetailsScreen extends StatelessWidget {
                                     dateTime: DateTime.now().toString(),
                                     text: messageController.text,
                                   );
+                                  messageController.clear();
                                 },
                                 minWidth: 1.0,
                                 child: const Icon(
