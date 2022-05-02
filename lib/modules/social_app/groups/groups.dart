@@ -6,6 +6,7 @@ import 'package:fast_chat/models/social_app/social_user_model.dart';
 import 'package:fast_chat/modules/social_app/groups_details/groups_detals.dart';
 
 import 'package:fast_chat/shared/components/components.dart';
+import 'package:fast_chat/shared/components/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -18,14 +19,14 @@ class GroupsScreen extends StatelessWidget {
     return BlocConsumer<SocialCubit, SocialStates>(
       listener: (context, state) {},
       builder: (context, state) {
+        var cubit=SocialCubit.get(context);
         return ConditionalBuilder(
-          condition: SocialCubit.get(context).listUsers.isNotEmpty,
+          condition: cubit.listUsers.isNotEmpty && cubit.listUsers.where((element) => element.uId != uId).toList().isNotEmpty,
           builder: (context) => ListView.separated(
             physics: const BouncingScrollPhysics(),
-            itemBuilder: (context, index) =>
-                buildChatItem(SocialCubit.get(context).listUsers[index], context),
+            itemBuilder: (context, index) => buildChatItem( cubit.listUsers.where((element) => element.uId != uId).toList()[index], context),
             separatorBuilder: (context, index) => myDivider(),
-            itemCount: SocialCubit.get(context).listUsers.length,
+            itemCount: SocialCubit.get(context).listUsers.where((element) => element.uId != uId).toList().length,
           ),
           fallback: (context) => const Center(child: CircularProgressIndicator()),
         );

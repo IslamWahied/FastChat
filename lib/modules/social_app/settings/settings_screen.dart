@@ -16,14 +16,14 @@ class SettingsScreen extends StatelessWidget {
     return BlocConsumer<SocialCubit, SocialStates>(
       listener: (context, state) {},
       builder: (context, state) {
-        var userModel = SocialCubit.get(context).userModel;
+        var cubit = SocialCubit.get(context);
 
         return SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
-                if(userModel != null &&  userModel.image != null)
+                if(cubit.userModel != null &&  cubit.userModel.image != null)
                 SizedBox(
                   height: 140.0,
                   child: CircleAvatar(
@@ -33,7 +33,7 @@ class SettingsScreen extends StatelessWidget {
                     child: CircleAvatar(
                       radius: 60.0,
                       backgroundImage: NetworkImage(
-                        userModel.image??'https://image.freepik.com/free-photo/photo-attractive-bearded-young-man-with-cherful-expression-makes-okay-gesture-with-both-hands-likes-something-dressed-red-casual-t-shirt-poses-against-white-wall-gestures-indoor_273609-16239.jpg',
+                        cubit.userModel.image??'https://image.freepik.com/free-photo/photo-attractive-bearded-young-man-with-cherful-expression-makes-okay-gesture-with-both-hands-likes-something-dressed-red-casual-t-shirt-poses-against-white-wall-gestures-indoor_273609-16239.jpg',
                       ),
                     ),
                   ),
@@ -42,7 +42,7 @@ class SettingsScreen extends StatelessWidget {
                   height: 15.0,
                 ),
                 Text(
-                  userModel.name,
+                  cubit.userModel.name,
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
                 const SizedBox(
@@ -50,7 +50,7 @@ class SettingsScreen extends StatelessWidget {
                 ),
 
                 Text(
-                  userModel.bio,
+                  cubit. userModel.bio,
                   style: Theme.of(context).textTheme.caption,
                 ),
                 const SizedBox(
@@ -100,22 +100,22 @@ class SettingsScreen extends StatelessWidget {
                   height: 15.0,
                 ),
 
-                ListTile(leading: const Icon(Icons.person),title: Text(userModel.name),),
+                ListTile(leading: const Icon(Icons.person),title: Text(cubit.userModel.name),),
                 const SizedBox(
                   height: 15.0,
                 ),
 
-                ListTile(leading: const Icon(Icons.note_add_outlined),title: Text(userModel.bio),),
+                ListTile(leading: const Icon(Icons.note_add_outlined),title: Text(cubit.userModel.bio),),
                 const SizedBox(
                   height: 15.0,
                 ),
 
-                ListTile(leading: const Icon(Icons.email),title: Text(userModel.email),),
+                ListTile(leading: const Icon(Icons.email),title: Text(cubit.userModel.email),),
                 const SizedBox(
                   height: 15.0,
                 ),
 
-                ListTile(leading: const Icon(Icons.phone),title: Text(userModel.phone),),
+                ListTile(leading: const Icon(Icons.phone),title: Text(cubit.userModel.phone),),
                 const SizedBox(
                   height: 15.0,
                 ),

@@ -11,6 +11,8 @@ import 'package:fast_chat/modules/social_app/social_register/social_register_scr
 import 'package:fast_chat/shared/components/components.dart';
 import 'package:fast_chat/shared/network/local/cache_helper.dart';
 
+import '../../../shared/components/constants.dart';
+
 class SocialLoginScreen extends StatelessWidget {
   var formKey = GlobalKey<FormState>();
   var emailController = TextEditingController();
@@ -37,11 +39,14 @@ class SocialLoginScreen extends StatelessWidget {
               value: state.uId,
             ).then((value)
             {
+              uId  = state.uId;
+
               navigateAndFinish(
                 context,
                 const SocialLayout(),
               );
-            });
+            }
+            );
           }
         },
         builder: (context, state) {

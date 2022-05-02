@@ -38,6 +38,10 @@ void main() async {
 
 
   uId = CacheHelper.getData(key: 'uId');
+  debugPrint('UID');
+
+  debugPrint(uId.toString());
+  debugPrint('UID');
 
   // if(onBoarding != null)
   // {
@@ -48,7 +52,7 @@ void main() async {
   //     widget = OnBoardingScreen();
   //   }
 
-  if (uId != null) {
+  if (uId != null&&uId.trim() !='') {
     widget = const SocialLayout();
   } else {
     widget = SocialLoginScreen();
@@ -99,8 +103,8 @@ class MyApp extends StatelessWidget {
             darkTheme: darkTheme,
             themeMode: ThemeMode.light,
             // home: SocialRegisterScreen(),
-            // home: startWidget,
-              home: startWidget,
+            home: startWidget,
+            //   home: SocialLoginScreen(),
           );
         },
       ),

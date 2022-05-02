@@ -1,5 +1,6 @@
 // @dart=2.9
 import 'package:fast_chat/layout/social_app/cubit/cubit.dart';
+import 'package:fast_chat/shared/components/constants.dart';
 import 'package:fast_chat/shared/network/local/cache_helper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -26,9 +27,12 @@ class SocialLoginCubit extends Cubit<SocialLoginStates> {
         .then((value) async {
 
             await CacheHelper.saveData(value:value.user.uid ,key: 'uId');
+            uId = value.user.uid;
             SocialCubit.get(context).getUsers();
+            SocialCubit.get(context).getUserData();
 
           emit(SocialLoginSuccessState(value.user.uid));
+
     })
         .catchError((error)
     {

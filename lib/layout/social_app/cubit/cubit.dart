@@ -36,8 +36,11 @@ class SocialCubit extends Cubit<SocialStates> {
     emit(SocialGetUserLoadingState());
 
     FirebaseFirestore.instance.collection('users').doc(uId).get().then((value) {
-      //print(value.data());
+
+      debugPrint(value.data().toString());
+
       userModel = SocialUserModel.fromJson(value.data());
+
       emit(SocialGetUserSuccessState());
     }).catchError((error) {
       debugPrint(error.toString());
@@ -137,25 +140,35 @@ class SocialCubit extends Cubit<SocialStates> {
     String cover,
     String image,
   }) {
-    SocialUserModel model = SocialUserModel(
-      name: name,
-      phone: phone,
-      bio: bio,
-      email: userModel.email,
-      cover: cover ?? userModel.cover,
-      image: image ?? userModel.image,
-      uId: userModel.uId,
-      isEmailVerified: false,
-    );
 
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(userModel.uId)
-        .update(model.toMap())
+    firebase_storage.FirebaseStorage.instance
+        .ref()
+        .child(
+        'SubCategory/${Uri.file(profileImage.path).pathSegments.last}')
+        .putFile(profileImage)
         .then((value) {
-      getUserData();
-    }).catchError((error) {
-      emit(SocialUserUpdateErrorState());
+      value.ref.getDownloadURL().then((value) {
+        SocialUserModel model = SocialUserModel(
+          name: name,
+          phone: phone,
+          bio: bio,
+          email: userModel.email,
+          cover: cover ?? userModel.cover,
+          image: value ?? userModel.image,
+          uId: userModel.uId,
+          isEmailVerified: false,
+        );
+
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(userModel.uId)
+            .update(model.toMap())
+            .then((value) {
+          getUserData();
+        }).catchError((error) {
+          emit(SocialUserUpdateErrorState());
+        });
+      });
     });
   }
 
@@ -185,7 +198,7 @@ class SocialCubit extends Cubit<SocialStates> {
 
 
   void getUsers() {
-
+    listUsers=[];
     if (listUsers.isEmpty) {
       FirebaseFirestore.instance.collection('users').get().then((value) {
         for (var element in value.docs) {
@@ -268,7 +281,7 @@ class SocialCubit extends Cubit<SocialStates> {
 
   void signOut(context)async{
     await FirebaseAuth.instance.signOut();
-    CacheHelper.removeData(key: 'uId');
+    await CacheHelper.saveData(key: 'uId',value: '');
 
     navigateAndFinish(context, SocialLoginScreen());
     emit(SocialSignOutState());

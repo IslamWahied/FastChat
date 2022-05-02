@@ -40,6 +40,7 @@ class EditProfileScreen extends StatelessWidget {
                       phone: phoneController.text,
                       bio: bioController.text,
 
+
                   );
                 },
                 text: 'Update',

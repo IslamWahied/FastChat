@@ -1,5 +1,7 @@
 // @dart=2.9
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fast_chat/shared/components/constants.dart';
+import 'package:fast_chat/shared/network/local/cache_helper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,7 +31,7 @@ class SocialRegisterCubit extends Cubit<SocialRegisterStates> {
       password: password,
     ).then((value) {
       userCreate(
-        uId: value.user.uid,
+        UId: value.user.uid,
         phone: phone,
         email: email,
         name: name,
@@ -44,13 +46,13 @@ class SocialRegisterCubit extends Cubit<SocialRegisterStates> {
     @required String name,
     @required String email,
     @required String phone,
-    @required String uId,
+    @required String UId,
   }) {
     SocialUserModel model = SocialUserModel(
       name: name,
       email: email,
       phone: phone,
-      uId: uId,
+      uId: UId,
       bio: 'write you bio ...',
       cover: 'https://image.freepik.com/free-photo/photo-attractive-bearded-young-man-with-cherful-expression-makes-okay-gesture-with-both-hands-likes-something-dressed-red-casual-t-shirt-poses-against-white-wall-gestures-indoor_273609-16239.jpg',
       image: 'https://image.freepik.com/free-photo/photo-attractive-bearded-young-man-with-cherful-expression-makes-okay-gesture-with-both-hands-likes-something-dressed-red-casual-t-shirt-poses-against-white-wall-gestures-indoor_273609-16239.jpg',
@@ -59,10 +61,12 @@ class SocialRegisterCubit extends Cubit<SocialRegisterStates> {
 
     FirebaseFirestore.instance
         .collection('users')
-        .doc(uId)
+        .doc(UId)
         .set(model.toMap())
         .then((value)
-    {
+    async {
+          uId  = UId;
+     await CacheHelper.saveData(key: 'uId',value:UId );
           emit(SocialCreateUserSuccessState());
     })
         .catchError((error) {
