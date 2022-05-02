@@ -43,6 +43,8 @@ dependencies:
   fluttertoast: ^8.0.9
   image_picker: ^0.8.5
   firebase_messaging: ^11.2.15
+  multiselect_formfield: ^0.1.7
+  multi_select_flutter: ^4.1.2
 
 
   #firebase

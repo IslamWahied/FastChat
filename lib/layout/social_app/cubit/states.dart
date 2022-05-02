@@ -98,3 +98,9 @@ class SocialGetMessagesSuccessState extends SocialStates {}
 
 class SocialSignOutState extends SocialStates {}
 
+
+// select users
+
+class HomeSelectedUsersState extends SocialStates {}
+
+

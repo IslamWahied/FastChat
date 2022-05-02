@@ -9,6 +9,8 @@ import 'package:fast_chat/shared/components/components.dart';
 import 'package:fast_chat/shared/components/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
+import 'package:multi_select_flutter/util/multi_select_item.dart';
 
 
 class GroupsScreen extends StatelessWidget {
@@ -20,6 +22,11 @@ class GroupsScreen extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         var cubit=SocialCubit.get(context);
+
+        final groups = cubit.listUsers
+            .map(
+                (element) => MultiSelectItem<SocialUserModel>(element, element.name))
+            .toList();
         return Column(
           children: [
             Padding(
@@ -37,71 +44,24 @@ class GroupsScreen extends StatelessWidget {
                             builder: (context,setState){
                               return AlertDialog(
                                 content: SizedBox(
-                                  height: MediaQuery.of(context).size.height * 0.2,
+                                  height: MediaQuery.of(context).size.height * 0.6,
                                   width: MediaQuery.of(context).size.width * 0.4,
                                   child: SingleChildScrollView(
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              'Sort by:',
-                                              style: TextStyle(
-                                                  color: Colors.green,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                InkWell(
-                                                  onTap: () {
-                                                    setState((){
-                                                    //  cubit.changeUpperSort();
-
-                                                    });
-                                                  },
-                                                  child: CircleAvatar(
-                                                    radius: 15,
-                                                    child: const Icon(
-                                                      Icons.arrow_downward,
-                                                      color: Colors.white,
-                                                      size: 17,
-                                                    ),
-
-                                                  //  cubit.LowerColor,
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                      0.03,
-                                                ),
-                                                InkWell(
-                                                  onTap: () {
-                                                    setState((){
-                                                     // cubit.changeLowerSort();
-
-                                                    });
-                                                  },
-                                                  child: CircleAvatar(
-                                                    radius: 15,
-                                                    child: const Icon(
-                                                      Icons.arrow_upward,
-                                                      color: Colors.white,
-                                                      size: 17,
-                                                    ),
-
-                                                   // cubit.upperColor,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
+                                        SizedBox(
+                                          child: defaultFormField(
+                                            controller: cubit.txtGroupNameController,
+                                            type: TextInputType.name,
+                                            validate: (String value) {
+                                              if (value.isEmpty) {
+                                                return 'please enter your group name';
+                                              }
+                                            },
+                                            label: 'Group Name',
+                                            prefix: Icons.group_add,
+                                          ),
                                         ),
                                         const Divider(
                                           thickness: 1,
@@ -111,52 +71,45 @@ class GroupsScreen extends StatelessWidget {
                                           MediaQuery.of(context).size.height /
                                               33,
                                         ),
-                                        InkWell(
-                                          onTap: () {
-                                            //cubit.sortByDate(context);
+                                        MultiSelectDialogField(
+                                          onConfirm: (val) {
+                                            cubit.selectUsers(val);
                                           },
-                                          child: Row(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                'Sort by date',
-                                                style: TextStyle(
-                                                    color: Colors.green,
-                                                    fontWeight: FontWeight.w500),
-                                              ),
-                                              const Icon(Icons.sort)
-                                            ],
+                                          buttonIcon: const Icon(Icons.arrow_drop_down_sharp),
+                                          itemsTextStyle: const TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.w500),
+                                          dialogWidth: MediaQuery.of(context).size.width * 0.7,
+                                          dialogHeight:
+                                          MediaQuery.of(context).size.height * 0.5,
+                                          backgroundColor: Colors.blueGrey[50],
+                                          cancelText: const Text(
+                                            'CANCEL',
+                                            style: TextStyle(
+                                                color: Colors.red, fontWeight: FontWeight.w500),
                                           ),
+                                          items: groups,
+                                          initialValue: cubit.selectedUsers,
                                         ),
-                                        SizedBox(
-                                          height:
-                                          MediaQuery.of(context).size.height /
-                                              33,
-                                        ),
-                                        InkWell(
-                                          onTap: () {
-                                            //cubit.sortByNum(context);
-                                          },
-                                          child: Row(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                'Sort by case number',
-                                                style: TextStyle(
-                                                    color: Colors.green,
-                                                    fontWeight: FontWeight.w500),
-                                              ),
-                                              const Icon(Icons.sort)
-                                            ],
-                                          ),
-                                        ),
+
+
+
                                       ],
                                     ),
                                   ),
                                 ),
                                 elevation: 24,
+                                actions: [
+                                  TextButton(onPressed: (){
+
+
+
+
+
+
+                                  }, child: const Text('OK')),
+                                  TextButton(onPressed: (){Navigator.pop(context);}, child: const Text('CANCEL',style: TextStyle(color: Colors.red),)),
+                                ],
                                 backgroundColor: Colors.blueGrey[50],
                                 shape: const RoundedRectangleBorder(
                                     borderRadius:
@@ -201,7 +154,7 @@ class GroupsScreen extends StatelessWidget {
                           children: const [
                             Text('New Group',style: TextStyle(color: Colors.white),),
                             SizedBox(width: 5,),
-                            Icon(Icons.add,color: Colors.white,),
+                            Icon(Icons.group_add,color: Colors.white,),
                           ],
                         )),
                   ),
@@ -258,4 +211,13 @@ class GroupsScreen extends StatelessWidget {
       ),
     ),
   );
+
+
+  Widget selectUsersItem(){
+
+
+
+
+
+  }
 }

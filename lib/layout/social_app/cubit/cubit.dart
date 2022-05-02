@@ -198,9 +198,10 @@ class SocialCubit extends Cubit<SocialStates> {
 
 
   void getUsers() {
-    listUsers=[];
+
     if (listUsers.isEmpty) {
       FirebaseFirestore.instance.collection('users').get().then((value) {
+        listUsers=[];
         for (var element in value.docs) {
 
             listUsers.add(SocialUserModel.fromJson(element.data()));
@@ -289,7 +290,24 @@ class SocialCubit extends Cubit<SocialStates> {
 
   }
 
+  var txtGroupNameController=TextEditingController();
 
+  List<SocialUserModel> selectedUsers = [];
+
+  void selectUsers(val) {
+    selectedUsers = val;
+    // for (var element in selectedGroups) {
+    //   groups.add(element.name);
+    // }
+    emit(HomeSelectedUsersState());
+  }
+
+void addGroup(){
+
+
+
+
+}
 
 
 
