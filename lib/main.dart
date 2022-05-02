@@ -1,6 +1,7 @@
 // @dart=2.9
 
 
+import 'package:fast_chat/modules/social_app/social_register/social_register_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'package:flutter/material.dart';
@@ -98,7 +99,8 @@ class MyApp extends StatelessWidget {
             darkTheme: darkTheme,
             themeMode: ThemeMode.light,
             // home: SocialRegisterScreen(),
-            home: startWidget,
+            // home: startWidget,
+              home: startWidget,
           );
         },
       ),
