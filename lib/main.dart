@@ -1,8 +1,10 @@
 // @dart=2.9
 
+import 'package:fast_chat/shared/styles/colors.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -100,8 +102,50 @@ class MyApp extends StatelessWidget {
         builder: (context, state) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
-            theme: lightTheme,
-            darkTheme: darkTheme,
+            theme: ThemeData(
+              primarySwatch: defaultColor,
+              scaffoldBackgroundColor: Colors.white,
+              appBarTheme: const AppBarTheme(
+                titleSpacing: 20.0,
+                systemOverlayStyle: SystemUiOverlayStyle(
+                  statusBarColor: Colors.white,
+                  statusBarIconBrightness: Brightness.dark,
+                ),
+                backgroundColor: Colors.white,
+                elevation: 0.0,
+                titleTextStyle: TextStyle(
+                  fontFamily: 'Jannah',
+                  color: Colors.black,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold,
+                ),
+                iconTheme: IconThemeData(
+                  color: Colors.black,
+                ),
+              ),
+              bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+                type: BottomNavigationBarType.fixed,
+                selectedItemColor: defaultColor,
+                unselectedItemColor: Colors.grey,
+                elevation: 20.0,
+                backgroundColor: Colors.white,
+              ),
+              textTheme: const TextTheme(
+                bodyText1: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black,
+                ),
+                subtitle1: TextStyle(
+                  fontSize: 14.0,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black,
+                  height: 1.3,
+                ),
+              ),
+              fontFamily: 'Jannah',
+            ),
+
             themeMode: ThemeMode.light,
             // home: SocialRegisterScreen(),
             home: startWidget,

@@ -66,32 +66,60 @@ class ChatDetailsScreen extends StatelessWidget {
                         child: ListView.separated(
                           reverse: true,
                           physics: const BouncingScrollPhysics(),
-                          itemBuilder: (context, index)
-                          {
-                            var message = cubit.messages.where((element) => (element.senderId == uId || element.receiverId == uId) && (element.senderId == userModel.uId || element.receiverId == userModel.uId) && element.groupId == '0' ).toList()[index];
-                          itemBuilder: (context, index) {
-                            var message =
-                                SocialCubit.get(context).messages[index];
-
-                            if(cubit.userModel.uId == message.senderId) {
-                            if (SocialCubit.get(context).userModel.uId ==
-                                    message.senderId &&
-                                message.longitude == null &&
-                                message.latitude == null) {
-                              return buildMyMessage(message);
-                            } else if (SocialCubit.get(context).userModel.uId ==
-                                    message.senderId &&
-                                message.longitude != null &&
-                                message.latitude != null) {
-                              return buildMyLocationMessage(message, context);
-                            } else {
-                              return buildMessage(message);
-                            }
-                          },
                           separatorBuilder: (context, index) => const SizedBox(
-                            height: 15.0,
-                          ),
-                          itemCount: cubit.messages.where((element) => (element.senderId == uId || element.receiverId == uId) && (element.senderId == userModel.uId || element.receiverId == userModel.uId) && element.groupId == '0' ).toList().length,
+    height: 15.0,
+    ),
+                                   itemCount: cubit.messages.where((element) => (element.senderId == uId || element.receiverId == uId) && (element.senderId == userModel.uId || element.receiverId == userModel.uId) && element.groupId == '0' ).toList().length,
+
+
+
+                          itemBuilder: (context, index) {
+                            var message = cubit.messages.where((element) => (element.senderId == uId || element.receiverId == uId) && (element.senderId == userModel.uId || element.receiverId == userModel.uId) && element.groupId == '0').toList()[index];
+
+                            // Check Sender Or Receiver
+
+                            //Sender
+                            if(cubit.userModel.uId == message.senderId){
+                               // Check Normal Message Or Location
+
+                              // normal
+                              if(message.longitude == null && message.latitude == null){
+
+                                return buildMyMessage(message);
+
+                              }
+
+                              // location
+                              else{
+
+                                return buildMyLocationMessage(message,context);
+                              }
+
+
+                            }
+                            // Receiver
+                            else{
+
+                              // Check Normal Message Or Location
+
+                              // normal
+                              if(message.longitude == null && message.latitude == null){
+
+                                return buildMessage(message);
+
+                              }
+
+                              // location
+                              else{
+
+                                return buildReciverLocationMessage(message,context);
+                              }
+
+
+                            }
+
+                            }
+
                         ),
                       ),
                       const SizedBox(height: 10,),
@@ -271,4 +299,22 @@ class ChatDetailsScreen extends StatelessWidget {
                   )),
             )),
       );
+  Widget buildReciverLocationMessage(MessageModel model, context) => Align(
+    alignment: AlignmentDirectional.centerStart,
+    child: InkWell(
+        onTap: () {
+          SocialCubit.get(context).goToMap(model.latitude, model.longitude);
+        },
+        child: const SizedBox(
+          width: 200,
+          child: Card(
+              elevation: 5,
+              child: Image(
+                image: AssetImage('assets/images/location.jpg'),
+                width: 200,
+                height: 200,
+                fit: BoxFit.cover,
+              )),
+        )),
+  );
 }
