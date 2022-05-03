@@ -290,7 +290,7 @@ class SocialCubit extends Cubit<SocialStates> {
     emit(HomeSelectedUsersState());
   }
 
-void addGroup(){
+void addGroup()async{
 
 final String encodedURL= Uri.encodeFull(mapLocationUrl);
 if(await canLaunch(encodedURL)){
