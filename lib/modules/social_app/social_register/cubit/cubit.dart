@@ -1,4 +1,6 @@
 // @dart=2.9
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fast_chat/shared/components/constants.dart';
 import 'package:fast_chat/shared/network/local/cache_helper.dart';

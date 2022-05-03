@@ -16,7 +16,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class ChatDetailsScreen extends StatelessWidget {
   SocialUserModel userModel;
 
-  ChatDetailsScreen({Key key,
+  ChatDetailsScreen({
+    Key key,
     this.userModel,
   }) : super(key: key);
 
@@ -29,7 +30,7 @@ class ChatDetailsScreen extends StatelessWidget {
         SocialCubit.get(context).getMessages(
           receiverId: userModel.uId,
         );
-
+        SocialCubit.get(context).getLocation();
         return BlocConsumer<SocialCubit, SocialStates>(
           listener: (context, state) {},
           builder: (context, state) {
@@ -68,12 +69,24 @@ class ChatDetailsScreen extends StatelessWidget {
                           itemBuilder: (context, index)
                           {
                             var message = cubit.messages.where((element) => (element.senderId == uId || element.receiverId == uId) && (element.senderId == userModel.uId || element.receiverId == userModel.uId) && element.groupId == '0' ).toList()[index];
+                          itemBuilder: (context, index) {
+                            var message =
+                                SocialCubit.get(context).messages[index];
 
                             if(cubit.userModel.uId == message.senderId) {
+                            if (SocialCubit.get(context).userModel.uId ==
+                                    message.senderId &&
+                                message.longitude == null &&
+                                message.latitude == null) {
                               return buildMyMessage(message);
+                            } else if (SocialCubit.get(context).userModel.uId ==
+                                    message.senderId &&
+                                message.longitude != null &&
+                                message.latitude != null) {
+                              return buildMyLocationMessage(message, context);
+                            } else {
+                              return buildMessage(message);
                             }
-
-                            return buildMessage(message);
                           },
                           separatorBuilder: (context, index) => const SizedBox(
                             height: 15.0,
@@ -109,25 +122,60 @@ class ChatDetailsScreen extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            Container(
-                              height: 50.0,
-                              color: defaultColor,
-                              child: MaterialButton(
-                                onPressed: () {
-                                  SocialCubit.get(context).sendMessage(
-                                    receiverId: userModel.uId,
-                                    dateTime: DateTime.now().toString(),
-                                    text: messageController.text,
-                                  );
-                                  messageController.clear();
-                                },
-                                minWidth: 1.0,
-                                child: const Icon(
-                                  IconBroken.Send,
-                                  size: 16.0,
-                                  color: Colors.white,
+                            Row(
+                              children: [
+                                Container(
+                                  height: 50.0,
+                                  color: defaultColor,
+                                  child: MaterialButton(
+                                    onPressed: () {
+                                      SocialCubit.get(context).sendMessage(
+                                        receiverId: userModel.uId,
+                                        dateTime: DateTime.now().toString(),
+                                        text: messageController.text,
+                                      );
+                                      messageController.clear();
+                                    },
+                                    minWidth: 1.0,
+                                    child: const Icon(
+                                      IconBroken.Send,
+                                      size: 16.0,
+                                      color: Colors.white,
+                                    ),
+                                  ),
                                 ),
-                              ),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                Container(
+                                  height: 50.0,
+                                  color: defaultColor,
+                                  child: MaterialButton(
+                                    onPressed: () {
+                                      SocialCubit.get(context).sendMessage(
+                                        receiverId: userModel.uId,
+                                        dateTime: DateTime.now().toString(),
+                                        text: messageController.text,
+                                        latitude: SocialCubit.get(context)
+                                            .locationData
+                                            .latitude,
+                                        longitude: SocialCubit.get(context)
+                                            .locationData
+                                            .longitude,
+                                      );
+                                      messageController.clear();
+
+                                      // SocialCubit.get(context).getLocation();
+                                    },
+                                    minWidth: 1.0,
+                                    child: const Icon(
+                                      Icons.add_location,
+                                      size: 16.0,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -173,7 +221,10 @@ class ChatDetailsScreen extends StatelessWidget {
         ),
       );
 
-  Widget buildMyMessage(MessageModel model) => Align(
+  Widget buildMyMessage(
+    MessageModel model,
+  ) =>
+      Align(
         alignment: AlignmentDirectional.centerEnd,
         child: Container(
           decoration: BoxDecoration(
@@ -200,5 +251,24 @@ class ChatDetailsScreen extends StatelessWidget {
             model.text,
           ),
         ),
+      );
+
+  Widget buildMyLocationMessage(MessageModel model, context) => Align(
+        alignment: AlignmentDirectional.centerEnd,
+        child: InkWell(
+            onTap: () {
+              SocialCubit.get(context).goToMap(model.latitude, model.longitude);
+            },
+            child: const SizedBox(
+              width: 200,
+              child: Card(
+                  elevation: 5,
+                  child: Image(
+                    image: AssetImage('assets/images/location.jpg'),
+                    width: 200,
+                    height: 200,
+                    fit: BoxFit.cover,
+                  )),
+            )),
       );
 }

@@ -26,6 +26,8 @@ import 'package:fast_chat/modules/social_app/settings/settings_screen.dart';
 
 import 'package:fast_chat/shared/components/constants.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:location/location.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SocialCubit extends Cubit<SocialStates> {
   SocialCubit() : super(SocialInitialState());
@@ -38,7 +40,6 @@ class SocialCubit extends Cubit<SocialStates> {
     emit(SocialGetUserLoadingState());
 
     FirebaseFirestore.instance.collection('users').doc(uId).get().then((value) {
-
       debugPrint(value.data().toString());
 
       userModel = SocialUserModel.fromJson(value.data());
@@ -198,9 +199,6 @@ List<GroupModel> listBasicGroup = [];
     });
   }
 
-
-
-
   void updateUser({
     @required String name,
     @required String phone,
@@ -211,8 +209,7 @@ List<GroupModel> listBasicGroup = [];
 
     firebase_storage.FirebaseStorage.instance
         .ref()
-        .child(
-        'SubCategory/${Uri.file(profileImage.path).pathSegments.last}')
+        .child('SubCategory/${Uri.file(profileImage.path).pathSegments.last}')
         .putFile(profileImage)
         .then((value) {
       value.ref.getDownloadURL().then((value) {
@@ -288,6 +285,8 @@ List<GroupModel> listBasicGroup = [];
     @required String receiverId,
     @required String dateTime,
     @required String text,
+    double latitude,
+    double longitude,
   }) {
     MessageModel model = MessageModel(
       text: text,
@@ -295,6 +294,8 @@ List<GroupModel> listBasicGroup = [];
       receiverId: receiverId,
       groupId: '0',
       dateTime: dateTime,
+      latitude: latitude,
+      longitude: longitude,
     );
 
     // set my chats
@@ -328,7 +329,9 @@ List<GroupModel> listBasicGroup = [];
         messages.add(MessageModel.fromJson(element.data()));
       }
 
-
+      debugPrint('userModel.uId');
+      debugPrint(userModel.uId);
+      debugPrint('userModel.uId');
 
       messages = messages.where((element) => element.receiverId == userModel.uId || element.senderId == userModel.uId).toList();
 
@@ -368,6 +371,60 @@ List<GroupModel> listBasicGroup = [];
 
     emit(HomeSelectedUsersState());
   }
+
+
+
+
+
+
+  Location location = Location();
+
+  bool serviceEnabled;
+  PermissionStatus permissionGranted;
+  LocationData locationData;
+
+  void getLocation()async{
+    serviceEnabled = await location.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await location.requestService();
+      if (!serviceEnabled) {
+        return;
+      }
+    }
+
+    permissionGranted = await location.hasPermission();
+    if (permissionGranted == PermissionStatus.denied) {
+      permissionGranted = await location.requestPermission();
+      if (permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
+
+    locationData = await location.getLocation();
+    debugPrint('Long ++++++  ${locationData.latitude.toString()}\n late________ ${locationData.longitude.toString()}');
+    debugPrint(' ${locationData..toString()}');
+    emit(ChatDetailGetLocationState());
+    // goToMap(locationData.latitude, locationData.longitude);
+  }
+
+void goToMap(double latitude,double longitude)async{
+
+String mapLocationUrl='https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
+
+final String encodedURL= Uri.encodeFull(mapLocationUrl);
+if(await canLaunch(encodedURL)){
+
+  await launch(encodedURL);
+
+
+
+}else{
+  debugPrint("couldn't not launch$encodedURL");
+}
+
+
+
+}
 
 
 
