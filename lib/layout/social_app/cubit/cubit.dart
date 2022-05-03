@@ -67,8 +67,6 @@ class SocialCubit extends Cubit<SocialStates> {
 
       currentIndex = index;
       emit(SocialChangeBottomNavState());
-
-
     } else {
       currentIndex = index;
       emit(SocialChangeBottomNavState());
@@ -94,10 +92,6 @@ class SocialCubit extends Cubit<SocialStates> {
   }
 
   // image_picker7901250412914563370.jpg
-
-
-
-
 
   void uploadProfileImage({
     @required String name,
@@ -128,9 +122,6 @@ class SocialCubit extends Cubit<SocialStates> {
     });
   }
 
-
-
-
   void updateUser({
     @required String name,
     @required String phone,
@@ -138,7 +129,6 @@ class SocialCubit extends Cubit<SocialStates> {
     String cover,
     String image,
   }) {
-
     firebase_storage.FirebaseStorage.instance
         .ref()
         .child('SubCategory/${Uri.file(profileImage.path).pathSegments.last}')
@@ -246,7 +236,6 @@ class SocialCubit extends Cubit<SocialStates> {
       messages = [];
 
       for (var element in event.docs) {
-
         messages.add(MessageModel.fromJson(element.data()));
       }
 
@@ -290,7 +279,44 @@ class SocialCubit extends Cubit<SocialStates> {
     emit(HomeSelectedUsersState());
   }
 
-void addGroup()async{
+  void addGroup() {}
+
+
+
+
+  Location location = Location();
+
+  bool serviceEnabled;
+  PermissionStatus permissionGranted;
+  LocationData locationData;
+
+  void getLocation()async{
+    serviceEnabled = await location.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await location.requestService();
+      if (!serviceEnabled) {
+        return;
+      }
+    }
+
+    permissionGranted = await location.hasPermission();
+    if (permissionGranted == PermissionStatus.denied) {
+      permissionGranted = await location.requestPermission();
+      if (permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
+
+    locationData = await location.getLocation();
+    debugPrint('Long ++++++  ${locationData.latitude.toString()}\n late________ ${locationData.longitude.toString()}');
+    debugPrint(' ${locationData..toString()}');
+    emit(ChatDetailGetLocationState());
+    // goToMap(locationData.latitude, locationData.longitude);
+  }
+
+void goToMap(double latitude,double longitude)async{
+
+String mapLocationUrl='https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
 
 final String encodedURL= Uri.encodeFull(mapLocationUrl);
 if(await canLaunch(encodedURL)){
