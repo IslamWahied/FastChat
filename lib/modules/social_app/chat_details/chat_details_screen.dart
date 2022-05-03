@@ -6,6 +6,7 @@ import 'package:fast_chat/layout/social_app/cubit/cubit.dart';
 import 'package:fast_chat/layout/social_app/cubit/states.dart';
 import 'package:fast_chat/models/social_app/message_model.dart';
 import 'package:fast_chat/models/social_app/social_user_model.dart';
+import 'package:fast_chat/shared/components/constants.dart';
 import 'package:fast_chat/shared/styles/colors.dart';
 import 'package:fast_chat/shared/styles/icon_broken.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +33,7 @@ class ChatDetailsScreen extends StatelessWidget {
         return BlocConsumer<SocialCubit, SocialStates>(
           listener: (context, state) {},
           builder: (context, state) {
+            var cubit = SocialCubit.get(context);
             return Scaffold(
               appBar: AppBar(
                 titleSpacing: 0.0,
@@ -61,13 +63,13 @@ class ChatDetailsScreen extends StatelessWidget {
                     children: [
                       Expanded(
                         child: ListView.separated(
-reverse: true,
+                          reverse: true,
                           physics: const BouncingScrollPhysics(),
                           itemBuilder: (context, index)
                           {
-                            var message = SocialCubit.get(context).messages[index];
+                            var message = cubit.messages.where((element) => (element.senderId == uId || element.receiverId == uId) && (element.senderId == userModel.uId || element.receiverId == userModel.uId) && element.groupId == '0' ).toList()[index];
 
-                            if(SocialCubit.get(context).userModel.uId == message.senderId) {
+                            if(cubit.userModel.uId == message.senderId) {
                               return buildMyMessage(message);
                             }
 
@@ -76,7 +78,7 @@ reverse: true,
                           separatorBuilder: (context, index) => const SizedBox(
                             height: 15.0,
                           ),
-                          itemCount: SocialCubit.get(context).messages.length,
+                          itemCount: cubit.messages.where((element) => (element.senderId == uId || element.receiverId == uId) && (element.senderId == userModel.uId || element.receiverId == userModel.uId) && element.groupId == '0' ).toList().length,
                         ),
                       ),
                       const SizedBox(height: 10,),

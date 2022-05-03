@@ -104,3 +104,6 @@ class SocialSignOutState extends SocialStates {}
 class HomeSelectedUsersState extends SocialStates {}
 
 
+// get Groups
+
+class GetGroupsState extends SocialStates {}

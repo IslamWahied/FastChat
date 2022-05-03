@@ -5,11 +5,13 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fast_chat/models/social_app/groupModel.dart';
 import 'package:fast_chat/modules/social_app/groups/groups.dart';
 import 'package:fast_chat/modules/social_app/social_login/social_login_screen.dart';
 import 'package:fast_chat/shared/components/components.dart';
 import 'package:fast_chat/shared/network/local/cache_helper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -64,6 +66,24 @@ class SocialCubit extends Cubit<SocialStates> {
     'Settings',
   ];
 
+
+  bool checkIfMember(){
+
+    for (var element in listBasicGroup) {
+
+      for (var element2 in element.listSocialUserModel) {
+        if(element2.uId == uId){
+
+          return true;
+        }
+
+      }
+
+    }
+
+      return false;
+  }
+
   void changeBottomNav(int index) {
     if (index == 0||index==1) {
 
@@ -79,6 +99,54 @@ class SocialCubit extends Cubit<SocialStates> {
 
   File profileImage;
   var picker = ImagePicker();
+
+
+List<GroupModel> listBasicGroup = [];
+  getAllGroups() async {
+    FirebaseFirestore.instance
+        .collection('Groups')
+        .snapshots()
+        .listen((event) {
+      listBasicGroup = event.docs.map((x) => GroupModel.fromJson(x.data())).toList();
+
+      emit(GetGroupsState());
+    });
+  }
+
+
+  createGroup(context){
+    int newGroupId = 1;
+    if(listBasicGroup.isNotEmpty){
+      newGroupId = listBasicGroup.length + 1;
+    }
+    listSelectedUsers.add(userModel);
+    GroupModel model = GroupModel(
+
+
+      groupName: txtGroupNameController.text,
+       listSocialUserModel: listSelectedUsers,
+      groupId: newGroupId,
+
+    );
+
+
+
+    FirebaseFirestore.instance
+        .collection('Groups')
+        .doc()
+        .set(model.toJson()).then((value) {
+
+      listSelectedUsers = [];
+      txtGroupNameController.clear();
+      Navigator.pop(context);
+
+
+    });
+
+
+
+  }
+
 
   Future<void> getProfileImage() async {
     final pickedFile = await picker.getImage(
@@ -260,9 +328,7 @@ class SocialCubit extends Cubit<SocialStates> {
         messages.add(MessageModel.fromJson(element.data()));
       }
 
-      print('userModel.uId');
-      print(userModel.uId);
-      print('userModel.uId');
+
 
       messages = messages.where((element) => element.receiverId == userModel.uId || element.senderId == userModel.uId).toList();
 
@@ -292,22 +358,18 @@ class SocialCubit extends Cubit<SocialStates> {
 
   var txtGroupNameController=TextEditingController();
 
-  List<SocialUserModel> selectedUsers = [];
+  List<SocialUserModel> listSelectedUsers = [];
 
   void selectUsers(val) {
-    selectedUsers = val;
-    // for (var element in selectedGroups) {
-    //   groups.add(element.name);
-    // }
+    if (kDebugMode) {
+      print(val);
+    }
+    listSelectedUsers = val;
+
     emit(HomeSelectedUsersState());
   }
 
-void addGroup(){
 
-
-
-
-}
 
 
 

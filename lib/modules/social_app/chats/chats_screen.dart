@@ -24,7 +24,7 @@ class ChatsScreen extends StatelessWidget {
           condition: cubit.listUsers.isNotEmpty && cubit.listUsers.where((element) => element.uId != uId).toList().isNotEmpty,
           builder: (context) => ListView.separated(
             physics: const BouncingScrollPhysics(),
-            itemBuilder: (context, index) => buildChatItem( cubit.listUsers.where((element) => element.uId != uId).toList()[index], context),
+            itemBuilder: (context, index) => buildChatItem( model: cubit.listUsers.where((element) => element.uId != uId ).toList()[index],context:  context),
             separatorBuilder: (context, index) => myDivider(),
             itemCount: SocialCubit.get(context).listUsers.where((element) => element.uId != uId).toList().length,
           ),
@@ -34,7 +34,7 @@ class ChatsScreen extends StatelessWidget {
     );
   }
 
-  Widget buildChatItem(SocialUserModel model, context) => InkWell(
+  Widget buildChatItem({SocialUserModel model, context}) => InkWell(
         onTap: () {
           navigateTo(
             context,
