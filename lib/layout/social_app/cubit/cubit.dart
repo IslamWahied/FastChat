@@ -44,6 +44,8 @@ class SocialCubit extends Cubit<SocialStates> {
 
       userModel = SocialUserModel.fromJson(value.data());
 
+
+
       emit(SocialGetUserSuccessState());
     }).catchError((error) {
       debugPrint(error.toString());
@@ -164,7 +166,7 @@ List<GroupModel> listBasicGroup = [];
     }
   }
 
-  // image_picker7901250412914563370.jpg
+
 
 
 
@@ -209,7 +211,7 @@ List<GroupModel> listBasicGroup = [];
 
     firebase_storage.FirebaseStorage.instance
         .ref()
-        .child('SubCategory/${Uri.file(profileImage.path).pathSegments.last}')
+        .child('users/${Uri.file(profileImage.path).pathSegments.last}')
         .putFile(profileImage)
         .then((value) {
       value.ref.getDownloadURL().then((value) {
@@ -283,6 +285,7 @@ List<GroupModel> listBasicGroup = [];
 
   void sendMessage({
     @required String receiverId,
+    @required int groupId,
     @required String dateTime,
     @required String text,
     double latitude,
@@ -292,7 +295,7 @@ List<GroupModel> listBasicGroup = [];
       text: text,
       senderId: userModel.uId,
       receiverId: receiverId,
-      groupId: '0',
+      groupId:  groupId??0,
       dateTime: dateTime,
       latitude: latitude,
       longitude: longitude,
@@ -315,9 +318,9 @@ List<GroupModel> listBasicGroup = [];
 
   List<MessageModel> messages = [];
 
-  void getMessages({
-    @required String receiverId,
-  }) {
+  void getMessages(
+
+  ) {
     FirebaseFirestore.instance
         .collection('chat')
         .snapshots()
@@ -329,11 +332,8 @@ List<GroupModel> listBasicGroup = [];
         messages.add(MessageModel.fromJson(element.data()));
       }
 
-      debugPrint('userModel.uId');
-      debugPrint(userModel.uId);
-      debugPrint('userModel.uId');
 
-      messages = messages.where((element) => element.receiverId == userModel.uId || element.senderId == userModel.uId).toList();
+      // messages = messages.where((element) => element.receiverId == userModel.uId || element.senderId == userModel.uId).toList();
 
       messages.sort((b, a) {
         var aDate = b.dateTime;
@@ -350,11 +350,19 @@ List<GroupModel> listBasicGroup = [];
 
 
   void signOut(context)async{
-    await FirebaseAuth.instance.signOut();
+
     await CacheHelper.saveData(key: 'uId',value: '');
 
     navigateAndFinish(context, SocialLoginScreen());
     emit(SocialSignOutState());
+    // await FirebaseAuth.instance.signOut().then((value) async {
+    //
+    //   await CacheHelper.saveData(key: 'uId',value: '');
+    //
+    //   navigateAndFinish(context, SocialLoginScreen());
+    //   emit(SocialSignOutState());
+    // });
+
 
 
   }

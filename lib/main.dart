@@ -94,6 +94,7 @@ class MyApp extends StatelessWidget {
           create: (BuildContext context) => SocialCubit()
             ..getUserData()
             ..getUsers()
+            ..getMessages()
           ..getAllGroups(),
         ),
       ],

@@ -177,12 +177,12 @@ class GroupsScreen extends StatelessWidget {
 
   Widget buildChatItem(GroupModel model, context) => InkWell(
     onTap: () {
-      // navigateTo(
-      //   context,
-      //   GroupDetailsScreen(
-      //     userModel: model,
-      //   ),
-      // );
+      navigateTo(
+        context,
+        GroupDetailsScreen(
+          groupModel: model,
+        ),
+      );
     },
     child: Padding(
       padding: const EdgeInsets.all(20.0),

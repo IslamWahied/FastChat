@@ -2,6 +2,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fast_chat/layout/social_app/cubit/cubit.dart';
 import 'package:fast_chat/shared/components/constants.dart';
 import 'package:fast_chat/shared/network/local/cache_helper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -23,6 +24,7 @@ class SocialRegisterCubit extends Cubit<SocialRegisterStates> {
     @required String email,
     @required String password,
     @required String phone,
+    context,
   }) {
 
 
@@ -49,6 +51,7 @@ class SocialRegisterCubit extends Cubit<SocialRegisterStates> {
     @required String email,
     @required String phone,
     @required String UId,
+    context,
   }) {
     SocialUserModel model = SocialUserModel(
       name: name,
@@ -68,6 +71,7 @@ class SocialRegisterCubit extends Cubit<SocialRegisterStates> {
         .then((value)
     async {
           uId  = UId;
+          SocialCubit.get(context).getUserData();
      await CacheHelper.saveData(key: 'uId',value:UId );
           emit(SocialCreateUserSuccessState());
     })

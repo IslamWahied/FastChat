@@ -2,7 +2,7 @@
 class MessageModel {
   String senderId;
   String receiverId;
-  String groupId;
+  int groupId;
   String dateTime;
   String text;
   double latitude;

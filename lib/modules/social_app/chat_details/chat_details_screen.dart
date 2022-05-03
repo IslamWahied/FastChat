@@ -27,9 +27,7 @@ class ChatDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Builder(
       builder: (BuildContext context) {
-        SocialCubit.get(context).getMessages(
-          receiverId: userModel.uId,
-        );
+
         SocialCubit.get(context).getLocation();
         return BlocConsumer<SocialCubit, SocialStates>(
           listener: (context, state) {},
@@ -69,12 +67,12 @@ class ChatDetailsScreen extends StatelessWidget {
                           separatorBuilder: (context, index) => const SizedBox(
     height: 15.0,
     ),
-                                   itemCount: cubit.messages.where((element) => (element.senderId == uId || element.receiverId == uId) && (element.senderId == userModel.uId || element.receiverId == userModel.uId) && element.groupId == '0' ).toList().length,
+                                   itemCount: cubit.messages.where((element) => (element.senderId == uId || element.receiverId == uId) && (element.senderId == userModel.uId || element.receiverId == userModel.uId) && element.groupId ==0 ).toList().length,
 
 
 
                           itemBuilder: (context, index) {
-                            var message = cubit.messages.where((element) => (element.senderId == uId || element.receiverId == uId) && (element.senderId == userModel.uId || element.receiverId == userModel.uId) && element.groupId == '0').toList()[index];
+                            var message = cubit.messages.where((element) => (element.senderId == uId || element.receiverId == uId) && (element.senderId == userModel.uId || element.receiverId == userModel.uId) && element.groupId == 0).toList()[index];
 
                             // Check Sender Or Receiver
 
@@ -112,7 +110,7 @@ class ChatDetailsScreen extends StatelessWidget {
                               // location
                               else{
 
-                                return buildReciverLocationMessage(message,context);
+                                return buildReceiverLocationMessage(message,context);
                               }
 
 
@@ -161,6 +159,7 @@ class ChatDetailsScreen extends StatelessWidget {
                                         receiverId: userModel.uId,
                                         dateTime: DateTime.now().toString(),
                                         text: messageController.text,
+                                        groupId: 0,
                                       );
                                       messageController.clear();
                                     },
@@ -181,6 +180,7 @@ class ChatDetailsScreen extends StatelessWidget {
                                   child: MaterialButton(
                                     onPressed: () {
                                       SocialCubit.get(context).sendMessage(
+                                        groupId: 0,
                                         receiverId: userModel.uId,
                                         dateTime: DateTime.now().toString(),
                                         text: messageController.text,
@@ -299,7 +299,7 @@ class ChatDetailsScreen extends StatelessWidget {
                   )),
             )),
       );
-  Widget buildReciverLocationMessage(MessageModel model, context) => Align(
+  Widget buildReceiverLocationMessage(MessageModel model, context) => Align(
     alignment: AlignmentDirectional.centerStart,
     child: InkWell(
         onTap: () {

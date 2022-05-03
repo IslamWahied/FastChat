@@ -114,9 +114,12 @@ class SettingsScreen extends StatelessWidget {
                 ),
 
 
-                ListTile(leading: GestureDetector(onTap: (){
-                  SocialCubit.get(context).signOut(context);
-                },child: const Icon(Icons.logout)),title: const Text('Logout'),),
+                GestureDetector(
+                  onTap: (){
+                    cubit.signOut(context);
+                  },
+                  child: const ListTile(leading: Icon(Icons.logout),title: Text('Logout'),),
+                ),
                 const SizedBox(
                   height: 15.0,
                 ),
