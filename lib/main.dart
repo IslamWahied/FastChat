@@ -1,8 +1,6 @@
 // @dart=2.9
 
-
-import 'package:fast_chat/modules/social_app/social_register/social_register_screen.dart';
-import 'package:firebase_core/firebase_core.dart';
+ import 'package:firebase_core/firebase_core.dart';
 
 import 'package:flutter/material.dart';
 
@@ -24,7 +22,7 @@ void main() async {
   // بيتأكد ان كل حاجه هنا في الميثود خلصت و بعدين يتفح الابلكيشن
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp( );
+  await Firebase.initializeApp();
 
   // Bloc.observer = MyBlocObserver();
 
@@ -35,7 +33,6 @@ void main() async {
   Widget widget;
 
   //bool onBoarding = CacheHelper.getData(key: 'onBoarding');
-
 
   uId = CacheHelper.getData(key: 'uId');
   debugPrint('UID');
@@ -52,7 +49,7 @@ void main() async {
   //     widget = OnBoardingScreen();
   //   }
 
-  if (uId != null&&uId.trim() !='') {
+  if (uId != null && uId.trim() != '') {
     widget = const SocialLayout();
   } else {
     widget = SocialLoginScreen();
@@ -75,7 +72,8 @@ class MyApp extends StatelessWidget {
   final bool isDark;
   final Widget startWidget;
 
-  const MyApp({Key key,
+  const MyApp({
+    Key key,
     this.isDark,
     this.startWidget,
   }) : super(key: key);
@@ -91,7 +89,9 @@ class MyApp extends StatelessWidget {
             ),
         ),
         BlocProvider(
-          create: (BuildContext context) => SocialCubit()..getUserData()..getUsers(),
+          create: (BuildContext context) => SocialCubit()
+            ..getUserData()
+            ..getUsers(),
         ),
       ],
       child: BlocConsumer<AppCubit, AppStates>(

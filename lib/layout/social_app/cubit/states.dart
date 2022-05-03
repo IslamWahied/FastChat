@@ -103,4 +103,7 @@ class SocialSignOutState extends SocialStates {}
 
 class HomeSelectedUsersState extends SocialStates {}
 
+// get location
 
+
+class ChatDetailGetLocationState extends SocialStates {}

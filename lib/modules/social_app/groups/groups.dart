@@ -148,7 +148,7 @@ class GroupsScreen extends StatelessWidget {
 
                     },
                     child: Container(
-                      padding: EdgeInsets.all(5),
+                      padding: const EdgeInsets.all(5),
                       decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),color: Colors.blue),
                         child: Row(
                           children: const [
@@ -213,11 +213,5 @@ class GroupsScreen extends StatelessWidget {
   );
 
 
-  Widget selectUsersItem(){
 
-
-
-
-
-  }
 }

@@ -5,6 +5,8 @@ class MessageModel {
   String groupId;
   String dateTime;
   String text;
+  double latitude;
+  double longitude;
 
   MessageModel({
     this.senderId,
@@ -12,6 +14,8 @@ class MessageModel {
     this.groupId,
     this.dateTime,
     this.text,
+    this.longitude,
+    this.latitude
   });
 
   MessageModel.fromJson(Map<String, dynamic> json)
@@ -21,6 +25,8 @@ class MessageModel {
     groupId = json['groupId'];
     dateTime = json['dateTime'];
     text = json['text'];
+    longitude = json['longitude'];
+    latitude = json['latitude'];
   }
 
   Map<String, dynamic> toMap()
@@ -31,6 +37,8 @@ class MessageModel {
       'groupId':groupId,
       'dateTime':dateTime,
       'text':text,
+      'longitude':longitude,
+      'latitude':latitude,
     };
   }
 }

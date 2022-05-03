@@ -1,4 +1,3 @@
-
 // ignore_for_file: deprecated_member_use
 
 // @dart=2.9
@@ -19,11 +18,12 @@ import 'package:fast_chat/models/social_app/message_model.dart';
 import 'package:fast_chat/models/social_app/social_user_model.dart';
 import 'package:fast_chat/modules/social_app/chats/chats_screen.dart';
 
-
 import 'package:fast_chat/modules/social_app/settings/settings_screen.dart';
 
 import 'package:fast_chat/shared/components/constants.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:location/location.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SocialCubit extends Cubit<SocialStates> {
   SocialCubit() : super(SocialInitialState());
@@ -36,7 +36,6 @@ class SocialCubit extends Cubit<SocialStates> {
     emit(SocialGetUserLoadingState());
 
     FirebaseFirestore.instance.collection('users').doc(uId).get().then((value) {
-
       debugPrint(value.data().toString());
 
       userModel = SocialUserModel.fromJson(value.data());
@@ -51,26 +50,22 @@ class SocialCubit extends Cubit<SocialStates> {
   int currentIndex = 0;
 
   List<Widget> screens = [
-
     const ChatsScreen(),
     const GroupsScreen(),
     const SettingsScreen(),
   ];
 
   List<String> titles = [
-
     'Chats',
     'Groups',
     'Settings',
   ];
 
   void changeBottomNav(int index) {
-    if (index == 0||index==1) {
+    if (index == 0 || index == 1) {
       getUsers();
       currentIndex = index;
       emit(SocialChangeBottomNavState());
-
-
     } else {
       currentIndex = index;
       emit(SocialChangeBottomNavState());
@@ -96,10 +91,6 @@ class SocialCubit extends Cubit<SocialStates> {
   }
 
   // image_picker7901250412914563370.jpg
-
-
-
-
 
   void uploadProfileImage({
     @required String name,
@@ -130,9 +121,6 @@ class SocialCubit extends Cubit<SocialStates> {
     });
   }
 
-
-
-
   void updateUser({
     @required String name,
     @required String phone,
@@ -140,11 +128,9 @@ class SocialCubit extends Cubit<SocialStates> {
     String cover,
     String image,
   }) {
-
     firebase_storage.FirebaseStorage.instance
         .ref()
-        .child(
-        'SubCategory/${Uri.file(profileImage.path).pathSegments.last}')
+        .child('SubCategory/${Uri.file(profileImage.path).pathSegments.last}')
         .putFile(profileImage)
         .then((value) {
       value.ref.getDownloadURL().then((value) {
@@ -188,24 +174,14 @@ class SocialCubit extends Cubit<SocialStates> {
     }
   }
 
-
-
-
-
-
   List<SocialUserModel> listUsers = [];
 
-
-
   void getUsers() {
-
     if (listUsers.isEmpty) {
       FirebaseFirestore.instance.collection('users').get().then((value) {
-        listUsers=[];
+        listUsers = [];
         for (var element in value.docs) {
-
-            listUsers.add(SocialUserModel.fromJson(element.data()));
-
+          listUsers.add(SocialUserModel.fromJson(element.data()));
         }
 
         emit(SocialGetAllUsersSuccessState());
@@ -220,6 +196,8 @@ class SocialCubit extends Cubit<SocialStates> {
     @required String receiverId,
     @required String dateTime,
     @required String text,
+    double latitude,
+    double longitude,
   }) {
     MessageModel model = MessageModel(
       text: text,
@@ -227,6 +205,8 @@ class SocialCubit extends Cubit<SocialStates> {
       receiverId: receiverId,
       groupId: '0',
       dateTime: dateTime,
+      latitude: latitude,
+      longitude: longitude,
     );
 
     // set my chats
@@ -235,13 +215,10 @@ class SocialCubit extends Cubit<SocialStates> {
         .collection('chat')
         .add(model.toMap())
         .then((value) {
-
       emit(SocialSendMessageSuccessState());
     }).catchError((error) {
       emit(SocialSendMessageErrorState());
     });
-
-
   }
 
   List<MessageModel> messages = [];
@@ -249,48 +226,42 @@ class SocialCubit extends Cubit<SocialStates> {
   void getMessages({
     @required String receiverId,
   }) {
-    FirebaseFirestore.instance
-        .collection('chat')
-        .snapshots()
-        .listen((event) {
+    FirebaseFirestore.instance.collection('chat').snapshots().listen((event) {
       messages = [];
 
       for (var element in event.docs) {
-
         messages.add(MessageModel.fromJson(element.data()));
       }
 
-      print('userModel.uId');
-      print(userModel.uId);
-      print('userModel.uId');
+      debugPrint('userModel.uId');
+      debugPrint(userModel.uId);
+      debugPrint('userModel.uId');
 
-      messages = messages.where((element) => element.receiverId == userModel.uId || element.senderId == userModel.uId).toList();
+      messages = messages
+          .where((element) =>
+              element.receiverId == userModel.uId ||
+              element.senderId == userModel.uId)
+          .toList();
 
       messages.sort((b, a) {
         var aDate = b.dateTime;
         var bDate = a.dateTime;
-        return bDate.compareTo(
-            aDate);
+        return bDate.compareTo(aDate);
       });
 
       emit(SocialGetMessagesSuccessState());
     });
   }
 
-
-
-
-  void signOut(context)async{
+  void signOut(context) async {
     await FirebaseAuth.instance.signOut();
-    await CacheHelper.saveData(key: 'uId',value: '');
+    await CacheHelper.saveData(key: 'uId', value: '');
 
     navigateAndFinish(context, SocialLoginScreen());
     emit(SocialSignOutState());
-
-
   }
 
-  var txtGroupNameController=TextEditingController();
+  var txtGroupNameController = TextEditingController();
 
   List<SocialUserModel> selectedUsers = [];
 
@@ -302,12 +273,61 @@ class SocialCubit extends Cubit<SocialStates> {
     emit(HomeSelectedUsersState());
   }
 
-void addGroup(){
+  void addGroup() {}
 
+
+
+
+  Location location = Location();
+
+  bool serviceEnabled;
+  PermissionStatus permissionGranted;
+  LocationData locationData;
+
+  void getLocation()async{
+    serviceEnabled = await location.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await location.requestService();
+      if (!serviceEnabled) {
+        return;
+      }
+    }
+
+    permissionGranted = await location.hasPermission();
+    if (permissionGranted == PermissionStatus.denied) {
+      permissionGranted = await location.requestPermission();
+      if (permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
+
+    locationData = await location.getLocation();
+    debugPrint('Long ++++++  ${locationData.latitude.toString()}\n late________ ${locationData.longitude.toString()}');
+    debugPrint(' ${locationData..toString()}');
+    emit(ChatDetailGetLocationState());
+    // goToMap(locationData.latitude, locationData.longitude);
+  }
+
+void goToMap(double latitude,double longitude)async{
+
+String mapLocationUrl='https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
+
+final String encodedURL= Uri.encodeFull(mapLocationUrl);
+if(await canLaunch(encodedURL)){
+
+  await launch(encodedURL);
+
+
+
+}else{
+  debugPrint("couldn't not launch$encodedURL");
+}
 
 
 
 }
+
+
 
 
 
