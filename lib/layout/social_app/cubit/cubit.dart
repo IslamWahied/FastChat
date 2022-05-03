@@ -1,3 +1,4 @@
+
 // ignore_for_file: deprecated_member_use
 
 // @dart=2.9
@@ -62,10 +63,12 @@ class SocialCubit extends Cubit<SocialStates> {
   ];
 
   void changeBottomNav(int index) {
-    if (index == 0 || index == 1) {
-      getUsers();
+    if (index == 0||index==1) {
+
       currentIndex = index;
       emit(SocialChangeBottomNavState());
+
+
     } else {
       currentIndex = index;
       emit(SocialChangeBottomNavState());
@@ -91,6 +94,10 @@ class SocialCubit extends Cubit<SocialStates> {
   }
 
   // image_picker7901250412914563370.jpg
+
+
+
+
 
   void uploadProfileImage({
     @required String name,
@@ -121,6 +128,9 @@ class SocialCubit extends Cubit<SocialStates> {
     });
   }
 
+
+
+
   void updateUser({
     @required String name,
     @required String phone,
@@ -128,6 +138,7 @@ class SocialCubit extends Cubit<SocialStates> {
     String cover,
     String image,
   }) {
+
     firebase_storage.FirebaseStorage.instance
         .ref()
         .child('SubCategory/${Uri.file(profileImage.path).pathSegments.last}')
@@ -176,18 +187,23 @@ class SocialCubit extends Cubit<SocialStates> {
 
   List<SocialUserModel> listUsers = [];
 
-  void getUsers() {
-    if (listUsers.isEmpty) {
-      FirebaseFirestore.instance.collection('users').get().then((value) {
-        listUsers = [];
-        for (var element in value.docs) {
-          listUsers.add(SocialUserModel.fromJson(element.data()));
-        }
 
+
+
+  void getUsers() {
+    listUsers=[];
+    if (listUsers.isEmpty) {
+
+
+      FirebaseFirestore.instance
+          .collection('users')
+          .snapshots()
+          .listen((event) {
+        listUsers = event.docs.map((x) => SocialUserModel.fromJson(x.data())).toList();
         emit(SocialGetAllUsersSuccessState());
-      }).catchError((error) {
-        debugPrint(error.toString());
-        emit(SocialGetAllUsersErrorState(error.toString()));
+      }).onError((handleError){
+        debugPrint(handleError.toString());
+        emit(SocialGetAllUsersErrorState(handleError.toString()));
       });
     }
   }
@@ -230,6 +246,7 @@ class SocialCubit extends Cubit<SocialStates> {
       messages = [];
 
       for (var element in event.docs) {
+
         messages.add(MessageModel.fromJson(element.data()));
       }
 
@@ -273,44 +290,7 @@ class SocialCubit extends Cubit<SocialStates> {
     emit(HomeSelectedUsersState());
   }
 
-  void addGroup() {}
-
-
-
-
-  Location location = Location();
-
-  bool serviceEnabled;
-  PermissionStatus permissionGranted;
-  LocationData locationData;
-
-  void getLocation()async{
-    serviceEnabled = await location.serviceEnabled();
-    if (!serviceEnabled) {
-      serviceEnabled = await location.requestService();
-      if (!serviceEnabled) {
-        return;
-      }
-    }
-
-    permissionGranted = await location.hasPermission();
-    if (permissionGranted == PermissionStatus.denied) {
-      permissionGranted = await location.requestPermission();
-      if (permissionGranted != PermissionStatus.granted) {
-        return;
-      }
-    }
-
-    locationData = await location.getLocation();
-    debugPrint('Long ++++++  ${locationData.latitude.toString()}\n late________ ${locationData.longitude.toString()}');
-    debugPrint(' ${locationData..toString()}');
-    emit(ChatDetailGetLocationState());
-    // goToMap(locationData.latitude, locationData.longitude);
-  }
-
-void goToMap(double latitude,double longitude)async{
-
-String mapLocationUrl='https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
+void addGroup(){
 
 final String encodedURL= Uri.encodeFull(mapLocationUrl);
 if(await canLaunch(encodedURL)){
